@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/base_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_bg"
+        android:drawableLeft="@drawable/icon_categary"
+        android:gravity="center|left"
+        android:minHeight="50dp"
+        android:paddingLeft="5dp"
+        android:text="商品分类"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ListView
+            android:id="@+id/cateListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gove_bg_color"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@drawable/divider"
+            android:dividerHeight="1.0dp"
+            android:fadingEdge="none"
+            android:listSelector="@color/transparent"
+            android:scrollbars="none" />
+
+        <ListView
+            android:id="@+id/cateListView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="80dp"
+            android:background="@drawable/edittext_bg"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@color/gray2"
+            android:dividerHeight="1.0dp"
+            android:fadingEdge="none"
+            android:listSelector="@color/transparent"
+            android:padding="5dp"
+            android:scrollbars="none"
+            android:visibility="gone" />
+
+        <ListView
+            android:id="@+id/cateListView3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="160dp"
+            android:background="@drawable/edittext_bg"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@color/gray2"
+            android:dividerHeight="1.0dp"
+            android:fadingEdge="none"
+            android:listSelector="@color/transparent"
+            android:padding="5dp"
+            android:scrollbars="none"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,373 @@
+/**   
+ * @Title: MineFragment.java 
+ * @Package cn.com.zhoufu.mouth.activity.mine 
+ * @Description: TODO(个人中心fragment) 
+ * @author 王小杰   
+ * @date 2014-2-11 上午11:59:22 
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.activity.mine;
+
+import java.io.File;
+import java.util.HashMap;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
+import cn.com.zhoufu.mozu.R;
+import cn.com.zhoufu.mouth.activity.BaseFragment;
+import cn.com.zhoufu.mouth.activity.MainActivity;
+import cn.com.zhoufu.mouth.activity.MainActivity.OnForResultListener;
+import cn.com.zhoufu.mouth.activity.setting.SettingActivity;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.model.UserInfo;
+import cn.com.zhoufu.mouth.utils.FileCache;
+import cn.com.zhoufu.mouth.utils.ImageBig;
+import cn.com.zhoufu.mouth.utils.ImageUtils;
+import cn.com.zhoufu.mouth.utils.PickPhoto;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+import cn.com.zhoufu.mouth.utils.XMLParser;
+import cn.com.zhoufu.mouth.view.CircleImageView;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+
+public class MineFragment extends BaseFragment implements OnClickListener,
+		OnForResultListener {
+
+	@ViewInject(R.id.left_button)
+	private Button left_button;
+
+	@ViewInject(R.id.base_title)
+	private TextView base_title;
+
+	@ViewInject(R.id.right_button)
+	private Button right_button;
+
+	@ViewInject(R.id.loginBtn)
+	private Button loginBtn;
+
+	@ViewInject(R.id.img_avatar)
+	private CircleImageView img_avatar;
+
+	@ViewInject(R.id.tvOrder)
+	private TextView tvOrder;
+
+	@ViewInject(R.id.tvCollect)
+	private TextView tvCollect;
+
+	@ViewInject(R.id.tvMessage)
+	private TextView tvMessage;
+
+	@ViewInject(R.id.tvAddress)
+	private TextView tvAddress;
+
+	@ViewInject(R.id.tvUserName)
+	private TextView tvUserName;
+
+	@ViewInject(R.id.tv_money)
+	private TextView tvUserMoney;// 余额
+
+	private Dialog dialog;
+
+	private String OUTPUTFILEPATH;
+
+	private FileCache fileCache;
+
+	private Bitmap photo;
+
+	private byte[] mContent;
+
+	UserInfo userInfo;
+
+	// application.getUser().getUser_money()
+	// + application.getUser().getCredit_line()
+	// - application.getUser().getFrozen_money()
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		((MainActivity) getActivity()).setListener(this);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_mine, container, false);
+		ViewUtils.inject(this, view);
+		initView();
+		fileCache = new FileCache(mContext);
+
+		return view;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		userInfo = application.getUser();
+		Log.e("tag",
+				"userInfo.getUser_money()   " + userInfo.getUser_money()
+						+ "   " + userInfo.getCredit_line() + "==="
+						+ userInfo.getFrozen_money());
+		tvUserMoney.setText("我的余額: " + userInfo.getUser_money());
+		if (application.getUser().getUser_id() != 0) {
+			img_avatar.setVisibility(View.VISIBLE);
+			loginBtn.setVisibility(View.GONE);
+			if ("".equals(application.getUser().getEmail())
+					|| application.getUser().getEmail() == null) {
+				tvUserName.setText(application.getUser().getUser_name());
+				Log.e("", "===================="
+						+ application.getUser().getUser_name());
+			} else {
+				tvUserName.setText(application.getUser().getEmail());
+			}
+
+			if (application.getUser().getUser_photo().indexOf("http") != -1) {
+				application.bitmapUtils.display(img_avatar, application
+						.getUser().getUser_photo());
+			} else
+				application.bitmapUtils.display(img_avatar, Constant.HOST_URLS
+						+ application.getUser().getUser_photo());
+			Log.e("", "===================="
+					+ application.getUser().getUser_photo());
+		}
+	}
+
+	public void initView() {
+		left_button.setVisibility(View.GONE);
+		base_title.setText("个人中心");
+		right_button.setVisibility(View.VISIBLE);
+		right_button.setBackgroundResource(R.drawable.icon_setting);
+	}
+
+	@OnClick(R.id.right_button)
+	public void settingClick(View v) {
+		startActivity(new Intent(mContext, SettingActivity.class));
+	}
+
+	@OnClick(R.id.loginBtn)
+	public void loginClick(View v) {
+		Intent intent = new Intent(mContext, LoginActivity.class);
+		startActivity(intent);
+	}
+
+//	@OnClick(R.id.img_avatar)
+//	public void imgClick(View v) {
+//		if (!XMLParser.isNetworkAvailable(mContext)) {
+//			application.showToast("网络未连接");
+//			return;
+//		}
+//		if (application.getUser().getUser_id() == 0) {
+//			startActivity(new Intent(mContext, LoginActivity.class));
+//			return;
+//		}
+//		dialog();
+//	}
+
+	@OnClick(R.id.tvOrder)
+	public void orderClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, OrderActivity.class));
+	}
+
+	@OnClick(R.id.tvCollect)
+	public void collectClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, CollectActivity.class));
+	}
+
+	@OnClick(R.id.tvMessage)
+	public void messageClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, MessageActivity.class));
+	}
+
+	@OnClick(R.id.tvAddress)
+	public void addressClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		Intent intent = new Intent(mContext, AddressActivity.class);
+		intent.putExtra("tag", "2");
+		startActivity(intent);
+	}
+
+	public void dialog() {
+		dialog = new Dialog(mContext, R.style.dialog);
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setContentView(R.layout.dialog_photo);
+		Button btn_take_photo = (Button) dialog
+				.findViewById(R.id.btn_take_photo);
+		Button btn_pick_photo = (Button) dialog
+				.findViewById(R.id.btn_pick_photo);
+		Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+
+		btn_take_photo.setOnClickListener(this);
+		btn_pick_photo.setOnClickListener(this);
+		btn_cancel.setOnClickListener(this);
+		WindowManager m = getActivity().getWindowManager();
+		Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+		WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+		params.width = (int) (d.getWidth() * 0.99); // 宽度设置为屏幕的0.8
+		params.height = (int) (d.getHeight() * 0.5); // 宽度设置为屏幕的0.8
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+
+		dialog.show();
+	}
+
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_take_photo:
+			dialog.dismiss();
+			try {
+				OUTPUTFILEPATH = fileCache.getImageCacheDir().getAbsolutePath()
+						+ File.separator + System.currentTimeMillis() + ".jpg";
+				PickPhoto.takePhoto(mAct, OUTPUTFILEPATH);
+			} catch (Exception e) {
+				Log.e("22", "---------------===" + e.getMessage());
+				showToast("找不到相机");
+			}
+			break;
+		case R.id.btn_pick_photo:
+			dialog.dismiss();
+			try {
+				PickPhoto.pickPhoto(mAct);
+			} catch (Exception e) {
+				Log.e("22", "---------------===" + e.getMessage());
+				showToast("找不到相册");
+			}
+			break;
+		case R.id.btn_cancel:
+			dialog.dismiss();
+			break;
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			String path = null;
+			switch (requestCode) {
+			case PickPhoto.TAKE_PHOTO:
+				path = ImageBig
+						.scalePicture(mContext, OUTPUTFILEPATH, 800, 800);
+				Log.d("path", path);
+				if (path != null) {
+					setBitmap(path);
+				}
+				break;
+			case PickPhoto.PICK_PHOTO:
+				try {
+					Cursor cursor = mContext.getContentResolver().query(
+							data.getData(), null, null, null, null);
+					cursor.moveToFirst();
+					path = ImageBig.scalePicture(mContext, cursor.getString(1),
+							800, 800);
+					cursor.close();
+					if (path != null) {
+						setBitmap(path);
+					}
+				} catch (Exception e) {
+					showToast("请选择图库中的照片");
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
+	private void setBitmap(String path) {
+		img_avatar.setImageURI(Uri.parse(path));
+		photo = ImageBig.getimage(path);
+		mContent = ImageUtils.Bitmap2Bytes(photo);
+		uploadHead();
+	}
+
+	public void uploadHead() {
+		StringBuffer json = new StringBuffer();
+		json.append("[{\"ImgStr\":\""
+				+ (mContent == null ? "" : Base64.encodeToString(mContent,
+						Base64.DEFAULT)) + "\",");
+		json.append("\"User_ID\":\"" + application.getUser().getUser_id()
+				+ "\"}]");
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("json", json.toString());
+		showProgress("正在上传头像");
+		WebServiceUtils.callWebService(Constant.S_UpdateHeadPortrait, map,
+				new WebServiceCallBack() {
+
+					public void callBack(Object result) {
+						dismissProgress();
+						Log.i("info", result.toString());
+						Bean bean = JSON.parseObject(result.toString(),
+								Bean.class);
+						if (bean.getState() == 1) {
+							application.showToast("上传头像成功");
+							userInfo.setUser_photo(bean.getData());
+							if (application.getUser().getUser_photo()
+									.indexOf("http") != -1) {
+								application.bitmapUtils.display(img_avatar,
+										application.getUser().getUser_photo());
+							} else
+								application.bitmapUtils.display(img_avatar,
+										Constant.HOST_URLS
+												+ application.getUser()
+														.getUser_photo());
+
+							application.setUser(userInfo);
+						} else {
+							application.showToast("上传头像失败");
+						}
+					}
+				});
+	}
+}

@@ -1,0 +1,46 @@
+/**   
+ * @Title: HistoricalAdapter.java 
+ * @Package cn.com.zhoufu.mouth.adapter 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-13 下午4:10:02
+ * @version V1.0   
+ */
+
+package cn.com.zhoufu.mouth.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.adapter.Categary2Adapter.ViewHolder;
+import cn.com.zhoufu.mouth.model.CategaryInfo;
+import cn.com.zhoufu.mouth.model.HistoricalInfo;
+
+public class HistoricalAdapter extends BaseListAdapter<HistoricalInfo> {
+
+	public HistoricalAdapter(Context context) {
+		super(context);
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.listitem_cate2, null);
+			viewHolder = new ViewHolder();
+			viewHolder.cat_name = (TextView) convertView.findViewById(R.id.name);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		HistoricalInfo info = mList.get(position);
+		viewHolder.cat_name.setText(info.getName());
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView cat_name;
+	}
+
+}

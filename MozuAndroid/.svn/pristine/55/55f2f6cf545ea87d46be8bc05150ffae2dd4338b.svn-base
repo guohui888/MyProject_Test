@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/activity_header" />
+
+   <TextView android:id="@+id/location"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:text="惠济区"
+       android:textColor="@color/gray2"
+       android:padding="8dp"
+       android:textSize="20dp"/>
+
+   <ListView
+       android:id="@+id/cityListView"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content" >
+   </ListView>
+
+</LinearLayout>

@@ -1,0 +1,83 @@
+package cn.com.zhoufu.mouth.activity.home;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+import cn.com.zhoufu.mouth.adapter.CascadeAdapter;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.model.CascadeInfo;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+
+import com.alibaba.fastjson.JSON;
+
+public class MapsActivity extends BaseActivity {
+
+	private ListView cityListView;
+
+	private TextView textView;
+
+	private String city, district;
+
+	List<CascadeInfo> list = new ArrayList<CascadeInfo>();
+
+	private CascadeAdapter mAdapter;
+
+	public static String name;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_map);
+		cityListView = (ListView) findViewById(R.id.cityListView);
+		textView = (TextView) findViewById(R.id.location);
+		setTitle("我的位置");
+		getProvince();
+	}
+
+	private void getProvince() {
+		Intent intent = getIntent();
+		textView.setText(intent.getStringExtra("district"));
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("Parent_ID", 11);
+		map.put("Region_Type", 2);
+		WebServiceUtils.callWebService(Constant.S_Cascade, map, new WebServiceCallBack() {
+			public void callBack(Object result) {
+				Bean bean = JSON.parseObject(result.toString(), Bean.class);
+				int state = bean.getState();
+				switch (state) {
+				case 1:
+					list = JSON.parseArray(bean.getData(), CascadeInfo.class);
+
+					mAdapter = new CascadeAdapter(mContext);
+					mAdapter.setList(list);
+					cityListView.setAdapter(mAdapter);
+					break;
+				default:
+					break;
+				}
+			}
+		});
+
+		cityListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				name = list.get(position).getRegion_name();
+				textView.setText(name);
+				HomeFragment.tvAddress.setText(name.substring(0, 3));
+				finish();
+			}
+		});
+	}
+}

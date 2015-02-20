@@ -1,0 +1,199 @@
+package cn.com.zhoufu.mouth.activity.cart;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StrictMode;
+import android.text.TextUtils;
+import android.util.Log;
+import cn.com.zhoufu.mouth.ZFApplication;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.utils.SharedUtils;
+import cn.com.zhoufu.mouth.utils.TimeConvertUtils;
+import cn.com.zhoufu.mouth.utils.api.StatusesAPI;
+
+import com.weibo.sdk.android.Oauth2AccessToken;
+import com.weibo.sdk.android.Weibo;
+import com.weibo.sdk.android.WeiboAuthListener;
+import com.weibo.sdk.android.WeiboDialogError;
+import com.weibo.sdk.android.WeiboException;
+import com.weibo.sdk.android.net.RequestListener;
+
+public class Sina {
+
+	private Context context;
+
+	private SharedUtils su;
+
+	private Oauth2AccessToken oauth2;
+
+	private ZFApplication app;
+
+	private Handler handler;
+
+	private Message msg = new Message();
+
+	public Sina(Context context, ZFApplication app) {
+		this.context = context;
+		this.app = app;
+		su = new SharedUtils(context);
+	}
+
+	public void sinaInstance() {
+		String time = su.readString("sTime");
+		if (time != null) {
+			if (!TimeConvertUtils.CheckTime(Long.parseLong(time))) {
+				app.showToast("请稍后再进行分享");
+				return;
+			}
+		}
+		handler = new Handler() {
+
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				int num = msg.arg1;
+				switch (num) {
+				case 1:
+					su.writeString("sTime", String.valueOf(System.currentTimeMillis()));
+					app.showToast("分享成功");
+					break;
+				case 2:
+					app.showToast("分享失败");
+					break;
+				case 3:
+					app.showToast("已分享成功");
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		String accessToken = su.readString("accessToken");
+		String expiresIn = su.readString("expiresIn");
+		if (!TextUtils.isEmpty(accessToken) && !TextUtils.isEmpty(expiresIn)) {
+			oauth2 = new Oauth2AccessToken(accessToken, expiresIn);
+			if (oauth2.isSessionValid()) {
+				oauth2 = new Oauth2AccessToken(accessToken, expiresIn);
+				sinaShare(app.getShareContent(), app.getPicPath());
+			} else {
+				sinaAuth();
+			}
+		} else {
+			sinaAuth();
+		}
+	}
+
+	private void sinaAuth() {
+		Weibo weibo = Weibo.getInstance(Constant.SINA_APP_ID, Constant.SINA_APP_URL, Constant.SCOPE);
+		weibo.anthorize(context, new WeiboAuthListener() {
+
+			public void onComplete(Bundle values) {
+				String accessToken = values.getString("access_token");
+				String expiresIn = values.getString("expires_in");
+				String uidString = values.getString("uid");
+				Log.d("bundle", values.toString());
+				su.writeString("accessToken", accessToken);
+				su.writeString("expiresIn", expiresIn);
+				su.writeString("uidString", uidString);
+				oauth2 = new Oauth2AccessToken(accessToken, expiresIn);
+				app.showToast("认证成功");
+				sinaShare(app.getShareContent(), app.getPicPath());
+			}
+
+			public void onWeiboException(WeiboException e) {
+				Log.e("auth", "认证失败" + e.getMessage());
+				app.showToast("授权失败");
+			}
+
+			public void onError(WeiboDialogError e) {
+				Log.e("auth", "认证失败");
+				app.showToast("认证失败");
+			}
+
+			public void onCancel() {
+
+			}
+		});
+	}
+
+	private void sinaShare(String content, String path) {
+		StatusesAPI statuses = new StatusesAPI(oauth2);
+		if ("".equals(path) || path == null) {
+			Log.i("info", "---------------1");
+			statuses.update(content, null, null, new RequestListener() {
+
+				public void onComplete(String response) {
+					msg.arg1 = 1;
+					handler.sendMessage(msg);
+				}
+
+				public void onIOException(IOException e) {
+					msg.arg1 = 2;
+					handler.sendMessage(msg);
+				}
+
+				public void onError(WeiboException e) {
+					try {
+						JSONObject json = new JSONObject(e.getMessage());
+						if (json.getInt("error_code") == 20019) {
+							msg.arg1 = 3;
+							handler.sendMessage(msg);
+						} else {
+							msg.arg1 = 2;
+							handler.sendMessage(msg);
+						}
+					} catch (JSONException jsone) {
+
+					}
+				}
+
+				public void onComplete4binary(ByteArrayOutputStream arg0) {
+
+				}
+			});
+		} else {
+			statuses.uploadUrlText(content, path, "0", "0", new RequestListener() {
+
+				public void onComplete(String response) {
+					msg.arg1 = 1;
+					handler.sendMessage(msg);
+					Log.i("info", response.toString());
+				}
+
+				public void onIOException(IOException e) {
+					msg.arg1 = 2;
+					handler.sendMessage(msg);
+					Log.i("info", e.getMessage());
+				}
+
+				public void onError(WeiboException e) {
+					try {
+						JSONObject json = new JSONObject(e.getMessage());
+						if (json.getInt("error_code") == 20019) {
+							msg.arg1 = 3;
+							handler.sendMessage(msg);
+						} else {
+							msg.arg1 = 2;
+							handler.sendMessage(msg);
+						}
+						Log.i("info", json.toString());
+					} catch (JSONException jsone) {
+
+					}
+				}
+
+				public void onComplete4binary(ByteArrayOutputStream arg0) {
+
+				}
+			});
+		}
+	}
+}

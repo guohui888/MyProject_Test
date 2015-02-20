@@ -1,0 +1,142 @@
+/**   
+ * @Title: SearchAdapter.java 
+ * @Package cn.com.zhoufu.mouth.adapter 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-13 下午5:36:09
+ * @version V1.0   
+ */
+
+package cn.com.zhoufu.mouth.adapter;
+
+import java.util.HashMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.content.Context;
+import android.graphics.Bitmap.Config;
+import android.graphics.Paint;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.SearchInfo;
+import cn.com.zhoufu.mouth.model.StockInfo;
+import cn.com.zhoufu.mouth.utils.AbViewUtil;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+
+import com.alibaba.fastjson.JSON;
+
+public class SearchAdapter extends BaseListAdapter<SearchInfo> {
+
+	private Handler handler;
+
+	ViewHolder viewHolder;
+
+	int good_number;
+
+	private int pos;
+
+	private SearchInfo info;
+
+	public SearchAdapter(Handler handler, Context context) {
+		super(context);
+		this.handler = handler;
+		application.bitmapUtils.configDefaultLoadingImage(R.drawable.default_bg2);
+		application.bitmapUtils.configDefaultLoadFailedImage(R.drawable.default_bg2);
+		application.bitmapUtils.configDefaultBitmapConfig(Config.RGB_565);
+	}
+
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.listitem_collect, null);
+			viewHolder = new ViewHolder();
+			viewHolder.tvGoods_name = (TextView) convertView.findViewById(R.id.tvGoods_name);
+			viewHolder.shop_price = (TextView) convertView.findViewById(R.id.shop_price);
+			viewHolder.market_price = (TextView) convertView.findViewById(R.id.market_price);
+			viewHolder.deleteBtn = (Button) convertView.findViewById(R.id.deleteBtn);
+			viewHolder.ivImageUrl = (ImageView) convertView.findViewById(R.id.ivImageUrl);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		info = mList.get(position);
+		viewHolder.tvGoods_name.setText(info.getGoods_name());
+		viewHolder.market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+		viewHolder.shop_price.setText(AbViewUtil.changTVsize("￥" + info.getShop_price()));
+		viewHolder.market_price.setText("￥" + info.getMarket_price());
+
+		viewHolder.deleteBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				info = mList.get(position);
+				pos = position;
+				isStock(info.getGoods_id(), 2);
+			}
+		});
+		Log.e("", "--" + info.getGoods_img());
+		application.bitmapUtils.display(viewHolder.ivImageUrl, Constant.IMAGE_URL + info.getGoods_img());
+		return convertView;
+	}
+
+	/***
+	 * 库存信息查询
+	 * 
+	 * @param Goods_ID
+	 *            商品ID
+	 * @param Agency_ID
+	 *            仓库ID
+	 */
+	public void isStock(int Goods_ID, int Agency_ID) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("Goods_ID", Goods_ID);
+		map.put("Agency_ID", Agency_ID);
+		WebServiceUtils.callWebService(Constant.S_StockLevel, map, new WebServiceCallBack() {
+			@Override
+			public void callBack(Object result) {
+				if (result != null) {
+					StockInfo stockInfo = JSON.parseObject(result.toString(), StockInfo.class);
+					if (stockInfo.getState().equals("0")) {
+						application.showToast("当前商品无库存");
+					} else {
+						String dataString = stockInfo.getData();
+						try {
+							JSONObject object = new JSONObject(dataString);
+							int goods_number = object.getInt("goods_number");
+							if (goods_number > 0) {
+								Message message = new Message();
+								message.what = 0;
+								message.arg1 = pos;
+								handler.sendMessage(message);
+							} else {
+								application.showToast("当前商品无库存");
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
+					}
+
+				}
+			}
+		});
+	}
+
+	static class ViewHolder {
+		TextView tvGoods_name;
+		TextView shop_price;
+		TextView market_price;
+		Button deleteBtn;
+		ImageView ivImageUrl;
+	}
+
+}

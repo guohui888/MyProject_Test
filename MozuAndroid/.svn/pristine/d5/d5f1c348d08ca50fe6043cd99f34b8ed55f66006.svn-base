@@ -1,0 +1,150 @@
+/**   
+* @Title: FeedBackActivity.java 
+* @Package cn.com.zhoufu.mouth.activity.setting 
+* @Description: TODO(反馈activity) 
+* @author 王小杰   
+* @date 2014-2-11 下午4:14:45
+* @version V1.0   
+*/ 
+package cn.com.zhoufu.mouth.activity.setting;
+
+import java.util.HashMap;
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.utils.AbStrUtil;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+
+public class FeedBackActivity extends BaseActivity implements TextWatcher{
+	
+	@ViewInject(R.id.right_button2)
+	private Button right_button;
+	
+	@ViewInject(R.id.et_title)
+	private EditText mEdtTitle;
+	
+	@ViewInject(R.id.et_content)
+	private EditText mEdtContent;
+	
+	@ViewInject(R.id.tv_word_number)
+	private TextView mTvWordNumber;
+	
+	@ViewInject(R.id.et_email)
+	private TextView mEdtEmail;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_feedback);
+		setTitle("意见反馈");
+		initView();
+	}
+
+	private void initView() {
+		right_button.setVisibility(View.VISIBLE);
+		right_button.setText("确定");
+		
+		mEdtContent.addTextChangedListener(this);
+	}
+	
+	@OnClick(R.id.right_button2)
+	public void feedback(View v) {
+		String title = mEdtTitle.getText().toString().trim();
+		String content = mEdtContent.getText().toString().trim();
+		String email = mEdtEmail.getText().toString().trim();
+		if (AbStrUtil.isEmpty(title)) {
+			showToast(R.string.error_title);
+			mEdtTitle.setFocusable(true);
+			mEdtTitle.requestFocus();
+			return;
+		}
+		if(AbStrUtil.isEmpty(content)) {
+			showToast(R.string.error_content);
+			mEdtContent.setFocusable(true);
+			mEdtContent.requestFocus();
+			return;
+		}
+		if (AbStrUtil.isEmpty(email)) {
+			showToast(R.string.error_email);
+			mEdtEmail.setFocusable(true);
+			mEdtEmail.requestFocus();
+			return;
+		}
+		if (!AbStrUtil.isEmail(email)) {
+			showToast(R.string.error_email_expr);
+			mEdtEmail.setFocusable(true);
+			mEdtEmail.requestFocus();
+			return;
+		}
+		showProgress("正在提交反馈意见，请稍候！");
+		HashMap<String, Object> properties = new HashMap<String, Object>();
+		properties.put("UserID", application.getUser().getUser_id());
+		properties.put("UserName", application.getUser().getUser_name());
+		properties.put("Email", email);
+		properties.put("Title", title);
+		properties.put("Content", content);
+		WebServiceUtils.callWebService(Constant.S_FeedBack, properties, new WebServiceCallBack() {
+
+			public void callBack(Object result) {
+				if(myProgressDialog.isShowing()) {
+					dismissProgress();
+				}
+				if (result != null) {
+					Log.d("aa", result.toString());
+					Bean bean = JSON.parseObject(result.toString(), Bean.class);
+					int state = bean.getState();
+					switch (state) {
+					case 0:
+						showToast("反馈失败！");
+						finish();
+						break;
+					case 1:
+						showToast("反馈成功！");
+						finish();
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		});
+	}
+
+	public void afterTextChanged(Editable s) {
+		int destLen = AbStrUtil.strLength(s.toString());
+		mTvWordNumber.setText(destLen + "/" + Constant.FEEDBACK_MAX_WORD_NUMBER);
+		String destStr = "";
+		for (int i = 0; i < s.toString().length(); i++) {
+			destStr += s.toString().charAt(i);
+			if (AbStrUtil.strLength(destStr) > Constant.FEEDBACK_MAX_WORD_NUMBER) {
+				destStr = destStr.substring(0, destStr.length() - 1);
+				break;
+			}
+		}
+		s.delete(destStr.length(), s.toString().length());
+	}
+
+	public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		
+	}
+
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		
+	}
+	
+}

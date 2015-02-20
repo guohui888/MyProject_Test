@@ -1,0 +1,54 @@
+/**   
+ * @Title: WeiboUtils.java 
+ * @Package cn.com.zhoufu.mouth.utils 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-13 上午10:11:21
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.utils;
+
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import android.util.Log;
+import cn.com.zhoufu.mouth.model.SinaInfo;
+
+/**
+ * @author Administrator
+ * 
+ */
+public class WeiboUtils {
+	public static SinaInfo getSinaDetails(String arg0) {
+		SinaInfo info = new SinaInfo();
+		try {
+			JSONTokener jsonParser = new JSONTokener(arg0);
+			Log.i("info", arg0);
+			JSONObject obj = (JSONObject) jsonParser.nextValue();
+			String name = obj.getString("name");
+			String head = obj.getString("avatar_hd");
+			String id = obj.getString("id");
+			info.setId("sina" + id);
+			info.setHead(head);
+			info.setName(name);
+		} catch (Exception e) {
+		}
+		return info;
+	}
+
+	public static SinaInfo getQQDetails(String result) {
+		SinaInfo info = new SinaInfo();
+		try {
+			JSONTokener jsonParser = new JSONTokener(result);
+			JSONObject obj = (JSONObject) jsonParser.nextValue();
+			String name = obj.getString("nickname");
+			String head = obj.getString("figureurl_qq_2");
+			info.setHead(head);
+			info.setName(name);
+			Log.i("info", result.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return info;
+	}
+}

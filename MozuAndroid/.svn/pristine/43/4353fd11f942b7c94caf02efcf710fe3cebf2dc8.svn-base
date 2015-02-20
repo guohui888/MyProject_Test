@@ -1,0 +1,115 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioGroup
+            android:id="@+id/tab_group"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/main_navigation_background"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/home"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:checked="true"
+                android:drawableTop="@drawable/home_tab_main_selector"
+                android:text="活动"
+                android:textColor="@drawable/selector_tab_text_color" />
+
+            <RadioButton
+                android:id="@+id/search"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:drawableTop="@drawable/home_tab_search_selector"
+                android:text="搜索"
+                android:textColor="@drawable/selector_tab_text_color" />
+
+            <RadioButton
+                android:id="@+id/category"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:drawableTop="@drawable/home_tab_category_selector"
+                android:text="分类"
+                android:textColor="@drawable/selector_tab_text_color" />
+
+            <RadioButton
+                android:id="@+id/cart"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:drawableTop="@drawable/home_tab_cart_selector"
+                android:text="购物车"
+                android:textColor="@drawable/selector_tab_text_color" />
+
+            <RadioButton
+                android:id="@+id/personal"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:drawableTop="@drawable/home_tab_personal_selector"
+                android:text="会员"
+                android:textColor="@drawable/selector_tab_text_color" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/product_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/tvunread"
+                    android:gravity="center_horizontal|top"
+                    android:paddingTop="1dp"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>

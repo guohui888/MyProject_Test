@@ -1,0 +1,29 @@
+<resources>
+
+    <string name="app_name">大嘴巴</string>
+    <string name="error_title">请输入标题！</string>
+    <string name="error_content">请输入您的反馈意见！</string>
+    <string name="error_phone">请输入手机号！</string>
+    <string name="error_phone_expr">手机号码格式不正确</string>
+    <string name="error_check_code">请输入验证码</string>
+    <string name="error_check_code_match">验证码输入不正确</string>
+    <string name="error_email">请输入邮箱！</string>
+    <string name="error_email_expr">邮箱格式不正确!</string>
+    <string name="error_user_name">请输入登录帐号</string>
+    <string name="error_pwd">请输入密码</string>
+    <string name="error_confirm_pwd">请输入确认密码！</string>
+    <string name="error_pwd_length1">密码长度不能少于6个字符</string>
+    <string name="error_pwd_length2">密码长度不能超过20个字符</string>
+    <string name="error_confirm_pwd_length1">确认密码长度不能少于6个字符</string>
+    <string name="error_confirm_pwd_length2">确认密码长度不能超过20个字符</string>
+    <string name="error_pwd_match">两次密码输入不一致！</string>
+    <string name="receiver_name">收货人</string>
+    <string name="receiver_mobile">手机号码</string>
+    <string name="none" />
+    <string name="product_add_to_car">加入购物车</string>
+    <string name="Ensure">"确定"</string>
+    <string name="Cancel">"取消"</string>
+    <string name="confirm_install_hint">"安装提示"</string>
+    <string name="confirm_install">"为保证您的交易安全，需要您安装支付宝安全支付服务，才能进行付款。\n\n点击确定，立即安装。"</string>
+    <string name="scan_text">将条纹码放入框内, 即可自动扫描</string>
+</resources>

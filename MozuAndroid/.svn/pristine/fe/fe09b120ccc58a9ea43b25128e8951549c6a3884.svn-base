@@ -1,0 +1,41 @@
+/**   
+ * @Title: MessageActivity.java 
+ * @Package cn.com.zhoufu.mouth.activity.mine 
+ * @Description: TODO(消息中心) 
+ * @author 王小杰   
+ * @date 2014-2-11 下午4:10:27
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.activity.mine;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import com.lidroid.xutils.view.annotation.ViewInject;
+
+import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+
+public class MessageActivity extends BaseActivity {
+
+	@ViewInject(R.id.messageListView)
+	private ListView mListView;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_message);
+		setTitle("消息中心");
+		List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		for (int i = 0; i < 20; i++) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			list.add(map);
+		}
+		SimpleAdapter mAdapter = new SimpleAdapter(mContext, list, R.layout.listitem_message, new String[] {}, new int[] {});
+		mListView.setAdapter(mAdapter);
+	}
+}

@@ -1,0 +1,128 @@
+package cn.com.zhoufu.mouth.activity.home;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import cn.com.zhoufu.mozu.R;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+import cn.com.zhoufu.mouth.activity.cart.ProductDetailActivity;
+import cn.com.zhoufu.mouth.adapter.PromationAdapter;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.model.SearchInfo;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+import cn.com.zhoufu.mouth.view.pullview.AbMultiColumnAdapterView;
+import cn.com.zhoufu.mouth.view.pullview.AbMultiColumnAdapterView.OnItemClickListener;
+import cn.com.zhoufu.mouth.view.pullview.AbMultiColumnListView;
+import cn.com.zhoufu.mouth.view.pullview.AbOnListViewListener;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.view.annotation.ViewInject;
+
+/**
+ * 
+ * 专区
+ * 
+ * @author RCP
+ * 
+ */
+public class PrefectureActivity extends BaseActivity implements
+		AbOnListViewListener {
+	@ViewInject(R.id.promationListView)
+	private AbMultiColumnListView mListView;
+	private List<SearchInfo> list;
+
+	private PromationAdapter mAdapter;
+
+	private int pageIndex = 1;
+
+	private int ad;
+
+	private int page = 10;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_promotion);
+		setTitle("促销商品");
+		init();
+	}
+
+	private void init() {
+		ad = getIntent().getIntExtra("ad", 2);
+		mAdapter = new PromationAdapter(mContext);
+		if (ad == 6) {// 会员专区
+			mAdapter.setAd(ad);
+		}
+		list = new ArrayList<SearchInfo>();
+		mAdapter.setList(list);
+		mListView.setAdapter(mAdapter);
+		keyword(1, page);
+		mListView.setPullLoadEnable(true);
+		mListView.setPullRefreshEnable(true);
+		mListView.setAbOnListViewListener(this);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AbMultiColumnAdapterView<?> parent,
+					View view, int position, long id) {
+				Intent intent = new Intent(mContext,
+						ProductDetailActivity.class);
+				intent.putExtra("info",
+						((SearchInfo) mAdapter.getItem((int) id)));
+				if (application.getUser().getUser_id() != 0) {
+					intent.putExtra("index", 0);// 会员
+				} else {
+					intent.putExtra("index", 1);
+				}
+				TextView tv = (TextView) view.findViewById(R.id.tvPrice);
+				intent.putExtra("price", tv.getText().toString());
+				startActivity(intent);
+			}
+		});
+	}
+
+	@Override
+	public void onRefresh() {
+		pageIndex = 1;
+		mAdapter.removeAll();
+		keyword(pageIndex, page);
+		mListView.stopRefresh();
+
+	}
+
+	@Override
+	public void onLoadMore() {
+		pageIndex++;
+		keyword(pageIndex, page);
+		mListView.stopLoadMore();
+
+	}
+
+	private void keyword(int pageIndex, int pageSize) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("ad", ad);
+		map.put("Page", pageIndex);
+		map.put("Count", pageSize);
+		WebServiceUtils.callWebService(Constant.S_Commodity, map,
+				new WebServiceCallBack() {
+					public void callBack(Object result) {
+						Log.i("info", result.toString());
+						if (result != null) {
+							Bean bean = JSON.parseObject(result.toString(),
+									Bean.class);
+							List<SearchInfo> list = JSON.parseArray(
+									bean.getData(), SearchInfo.class);
+							mAdapter.addAll(list);
+						}
+					}
+				});
+	}
+
+}

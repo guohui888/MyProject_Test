@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="product_detail_image_viewpager_height">237.29999dip</dimen>
+    <dimen name="product_detail_image_count_margin_right">10.0dip</dimen>
+    <dimen name="product_detail_image_current_page_textsize">13.329987sp</dimen>
+    <dimen name="product_detail_image_count_page_textsize">10.669983sp</dimen>
+    <dimen name="product_detail_bottom_height">52.0dip</dimen>
+    <dimen name="product_detail_button_width">86.0dip</dimen>
+    <dimen name="product_detail_button_height">32.0dip</dimen>
+    <dimen name="product_detail_bottombar_gocar_marginleft">26.669983dip</dimen>
+    <dimen name="product_detail_bottombar_collect_marginleft">26.669983dip</dimen>
+    <dimen name="product_detail_bottombar_share_marginleft">28.669983dip</dimen>
+
+</resources>

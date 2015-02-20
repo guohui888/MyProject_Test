@@ -1,0 +1,20 @@
+package cn.com.zhoufu.mouth.activity.cart.pay;
+
+public class PartnerConfig {
+
+	// 合作商户ID。用签约支付宝账号登录ms.alipay.com后，在账户信息页面获取。
+	public static final String PARTNER = "2088301056513163";
+
+	// 商户收款的支付宝账号
+	public static final String SELLER = "295938951@qq.com";
+
+	// 商户（RSA）私钥 用签约支付宝账号登录ms.alipay.com后，在密钥管理页面获取。（openssl从pem文件中生存的字符串）
+	public static final String RSA_PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAN8KRmJ2RsKr8XZxb7PhAziInoGxNzyWYZfbHV5TL1n6ldshnPnyHl7JVUPRbt01PTESPNRPoeKFvJvThZ4UE+t4VQDsbEDXz8bsl57OUo5SQyAyK0TZLvEjnVw+woePAWxRdsjjIzZnTh/Qxb/20QOPmuFIvPw0SPiT1UBi8pp5AgMBAAECgYBqsiife4M4JzbYeUV9YFvBFKH22sbYxfujwF8ZO2QAgD5l2HuWmftrTpbqXWrSiWBfdCEDU6DWkzF5vcNCrsojyviTKv83++fUjN2YmmKKSryOQvpQCbtPh7BIujXLXGFm/+v0lC+AMR0faqwczCFl1c/GEw9PEUSKapkNGhM+AQJBAPUKiNf1NpeLlfbW5YGGAJIrYDUNb5b40ytSyNQyflLZiwlFOxVJHtn/RHWRTeogcfRJD6HNrH5Qvs8QvDoVU8ECQQDpA9oL1sYXePY8QvxntjLsCpQvHjd5Zl+phwGQ+CrcClNYQXTZTsA/mf4R5/I9TmCrI7uyNVjFGoxc1PsGfhS5AkEAxs0fLKZC/jw/FJ5QYP8Io44RZbla2U9Sc4mcaZv1pN3d0U2bm69RGmfhcMjMP7DHAvvrdMhas7hqta/MJgt7gQJAcTW23aOmsMbLU7Hz8euayAXHwzC6IRh1B+eZAjcgk7HMloeO3vmc/Am0YDzB+7k1zFBbJBU5IOJqKbwsjhX5uQJBAOT3TLZI9E+qG3bBASuvBBCZJKgalP+S3lAlLvIi3X477U1WekIHJeuZzquF/IQ659r92tJGbIsJp+GRW/ZIjhI=";
+
+	// 支付宝（RSA）公钥 用签约支付宝账号登录ms.alipay.com后，在密钥管理页面获取。（ 支付宝公钥 ）
+	public static final String RSA_ALIPAY_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCDvH5ZzCJPlEb/3YnRqudjQNEaErYOcdOo3bB80zUiPRNw+ww1Tjd4H0JSwoVCk0i7YHymqWTLTJNspfe1Kw3zdUexn3q8sFGgPYYYZMXBJ7mCIvJi HDCze/gWvbnCB2W01xmSSByY2vnPvThoNipSFO6dWALSNX/uEnKJMSGDvwIDAQAB";
+
+	public static final String ALIPAY_PLUGIN_NAME = "alipay_plugin223_0309.apk";
+	
+	public final static String server_url = "https://msp.alipay.com/x.htm";
+}

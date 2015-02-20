@@ -1,0 +1,54 @@
+/**   
+ * @Title: SureAdapter.java 
+ * @Package cn.com.zhoufu.mouth.adapter 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-18 下午4:46:49
+ * @version V1.0   
+ */
+
+package cn.com.zhoufu.mouth.adapter;
+
+import java.math.BigDecimal;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.adapter.Categary2Adapter.ViewHolder;
+import cn.com.zhoufu.mouth.model.AddCartInfo;
+import cn.com.zhoufu.mouth.model.CategaryInfo;
+
+public class SureAdapter extends BaseListAdapter<AddCartInfo> {
+
+	public SureAdapter(Context context) {
+		super(context);
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.listitem_sure_order, null);
+			viewHolder = new ViewHolder();
+			viewHolder.goodsName = (TextView) convertView.findViewById(R.id.goodsName);
+			viewHolder.goodsNumber = (TextView) convertView.findViewById(R.id.goodsNumber);
+			viewHolder.goodsPrice = (TextView) convertView.findViewById(R.id.goodsPrice);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		AddCartInfo info = mList.get(position);
+		viewHolder.goodsName.setText(info.getGoods_name());
+		viewHolder.goodsNumber.setText("数量：" + info.getGoods_number());
+		BigDecimal b1 = new BigDecimal(info.getGoods_number() * Double.parseDouble(info.getGoods_price()));
+		double discount = b1.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+		viewHolder.goodsPrice.setText("价格：￥" + discount);
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView goodsName, goodsNumber, goodsPrice;
+	}
+
+}

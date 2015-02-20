@@ -1,0 +1,61 @@
+/**   
+ * @Title: CommentAdapter.java 
+ * @Package cn.com.zhoufu.mouth.adapter 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-20 上午11:06:07
+ * @version V1.0   
+ */
+
+package cn.com.zhoufu.mouth.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.model.CommentInfo;
+
+public class CommentAdapter extends BaseListAdapter<CommentInfo> {
+
+	public CommentAdapter(Context context) {
+		super(context);
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.listitem_comment, null);
+			viewHolder = new ViewHolder();
+			viewHolder.userName = (TextView) convertView.findViewById(R.id.userName);
+			viewHolder.addtime = (TextView) convertView.findViewById(R.id.addtime);
+			viewHolder.content = (TextView) convertView.findViewById(R.id.content);
+			viewHolder.adminComment = (TextView) convertView.findViewById(R.id.adminComment);
+			viewHolder.admin = (TextView) convertView.findViewById(R.id.admin);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		CommentInfo info = mList.get(position);
+		if (info.getUser_name() == null || "".equals(info.getUser_name())) {
+			viewHolder.userName.setText("匿名用户");
+		} else {
+			viewHolder.userName.setText(info.getUser_name());
+		}
+		if ("".equals(info.getAdmincomment()) || info.getAdmincomment() == null) {
+			viewHolder.admin.setVisibility(View.GONE);
+			viewHolder.adminComment.setVisibility(View.GONE);
+		} else {
+			viewHolder.admin.setVisibility(View.VISIBLE);
+			viewHolder.adminComment.setText(info.getAdmincomment());
+		}
+		viewHolder.addtime.setText(info.getAdd_time());
+		viewHolder.content.setText(info.getContent());
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView userName, addtime, content, adminComment, admin;
+	}
+
+}

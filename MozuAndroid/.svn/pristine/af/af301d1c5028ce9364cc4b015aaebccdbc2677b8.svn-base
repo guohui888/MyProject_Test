@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/activity_header" />
+
+    <LinearLayout
+        android:id="@+id/ly_search_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_bg"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:visibility="gone" >
+
+        <Button
+            android:id="@+id/left_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/selector_header_back_btn"
+            android:onClick="onBack" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/search_bg"
+            android:gravity="center|left"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/search_left_bg" />
+
+            <EditText
+                android:id="@+id/edKeyword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="请输入产品名称"
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/searchsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@drawable/selector_login_right"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="搜索"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_search_radiogroup_btn"
+            android:button="@null"
+            android:checked="true"
+            android:drawableRight="@drawable/selector_search_radiobutton_right"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="人气"
+            android:textColor="@drawable/selector_search_text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray2" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_search_radiogroup_btn"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_search_radiobutton_right"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="价格"
+            android:textColor="@drawable/selector_search_text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray2" />
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_search_radiogroup_btn"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_search_radiobutton_right"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="更新时间"
+            android:textColor="@drawable/selector_search_text"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="0.1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray2" />
+
+        <RadioButton
+            android:id="@+id/radioButton4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_search_radiogroup_btn"
+            android:button="@null"
+            android:drawableRight="@drawable/selector_search_radiobutton_right"
+            android:gravity="center"
+            android:padding="0dp"
+            android:text="上架时间"
+            android:textColor="@drawable/selector_search_text"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <cn.com.zhoufu.mouth.view.pullview.AbPullListView
+            android:id="@+id/searchListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gove_bg_color"
+            android:cacheColorHint="@color/transparent"
+            android:divider="@color/gray"
+            android:dividerHeight="1.0dp"
+            android:fadingEdge="none"
+            android:listSelector="@color/transparent"
+            android:scrollbars="none" />
+
+        <TextView
+            android:id="@+id/myText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无匹配商品"
+            android:textColor="@color/search_cate_text_color_normal"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+</LinearLayout>

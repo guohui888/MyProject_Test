@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="@drawable/edittext_bg"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="掌上专享价格"
+            android:textColor="@color/gray"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/close_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/close_diaog_bg" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/red2" />
+
+    <ImageView
+        android:id="@+id/imageUrl"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        android:src="@drawable/about_logo" />
+
+    <TextView
+        android:id="@+id/goodsName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center|left"
+        android:padding="5dp"
+        android:singleLine="true"
+        android:text="冰红茶"
+        android:textColor="@color/black"
+        android:textSize="18sp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvGoodsPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center|left"
+        android:padding="5dp"
+        android:text="￥6.50"
+        android:textColor="@color/red2"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/GoodsBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/selector_login_btn"
+        android:padding="10dp"
+        android:text="查看商品"
+        android:textColor="@color/white" />
+
+</LinearLayout>

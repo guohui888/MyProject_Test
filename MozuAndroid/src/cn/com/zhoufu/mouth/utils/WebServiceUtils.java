@@ -1,0 +1,177 @@
+package cn.com.zhoufu.mouth.utils;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpResponseException;
+import org.ksoap2.transport.HttpTransportSE;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import cn.com.zhoufu.mouth.constants.Constant;
+
+public class WebServiceUtils {
+
+	// 含有3个线程的线程池
+	private static final ExecutorService executorService = Executors
+			.newFixedThreadPool(3);
+
+	/**
+	 * 
+	 * @param url
+	 *            WebService服务器地址
+	 * @param methodName
+	 *            WebService的调用方法名
+	 * @param properties
+	 *            WebService的参数
+	 * @param webServiceCallBack
+	 *            回调接口
+	 */
+	public static void callWebService(final String methodName,
+			HashMap<String, Object> map,
+			final WebServiceCallBack webServiceCallBack) {
+		// 创建HttpTransportSE对象，传递WebService服务器地址
+		final HttpTransportSE httpTransportSE = new HttpTransportSE(
+				Constant.WEB_SERVER_URL);
+		// 创建SoapObject对象
+		SoapObject soapObject = new SoapObject(Constant.NAMESPACE, methodName);
+
+		// SoapObject添加参数
+		if (map != null) {
+			for (Iterator<Map.Entry<String, Object>> it = map.entrySet()
+					.iterator(); it.hasNext();) {
+				Map.Entry<String, Object> entry = it.next();
+				soapObject.addProperty(entry.getKey(), entry.getValue());
+			}
+		}
+
+		// 实例化SoapSerializationEnvelope，传入WebService的SOAP协议的版本号
+		final SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(
+				SoapEnvelope.VER11);
+		// 设置是否调用的是.Net开发的WebService
+		soapEnvelope.setOutputSoapObject(soapObject);
+		soapEnvelope.dotNet = true;
+		httpTransportSE.debug = true;
+
+		// 用于子线程与主线程通信的Handler
+		final Handler mHandler = new Handler() {
+
+			@Override
+			public void handleMessage(Message msg) {
+				super.handleMessage(msg);
+				// 将返回值回调到callBack的参数中
+				try {
+					// Log.d("webservice", msg.obj.toString());
+					webServiceCallBack.callBack((Object) msg.obj);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		};
+
+		// 开启线程去访问WebService
+		executorService.submit(new Runnable() {
+
+			public void run() {
+				Object resultSoapObject = null;
+				try {
+					httpTransportSE.call(Constant.NAMESPACE + methodName,
+							soapEnvelope);
+					Log.e("", "=================================");
+					if (soapEnvelope.getResponse() != null) {
+						// 获取服务器响应返回的SoapObject
+						resultSoapObject = soapEnvelope.getResponse();
+						Log.e("", "tag   resultSoapObject=" + resultSoapObject);
+					} else {
+						Log.e("", "tag   2222resultSoapObject="
+								+ resultSoapObject);
+					}
+				} catch (HttpResponseException e) {
+					e.printStackTrace();
+					Log.e("",
+							"HttpResponseException================="
+									+ e.getMessage());
+				} catch (IOException e) {
+					e.printStackTrace();
+					Log.e("", "IOException=================" + e.getMessage());
+				} catch (XmlPullParserException e) {
+					e.printStackTrace();
+					Log.e("",
+							"XmlPullParserException================="
+									+ e.getMessage());
+				} finally {
+					// 将获取的消息利用Handler发送到主线程
+					mHandler.sendMessage(mHandler.obtainMessage(0,
+							resultSoapObject));
+				}
+			}
+		});
+	}
+
+	public static String callByPost(String url, List<NameValuePair> data,
+			final WebServiceCallBack webServiceCallBack) {
+
+		HttpPost httpPost = new HttpPost(url);
+		try {
+			final Handler mHandler = new Handler() {
+				@Override
+				public void handleMessage(Message msg) {
+					super.handleMessage(msg);
+					webServiceCallBack.callBack((Object) msg.obj);
+				}
+			};
+			if (data != null) {
+				httpPost.setEntity(new UrlEncodedFormEntity(data, HTTP.UTF_8));
+			}
+
+			HttpResponse httpResponse = new DefaultHttpClient()
+					.execute(httpPost);
+
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				String result = EntityUtils.toString(httpResponse.getEntity(),
+						"UTF-8");
+				Message msg = new Message();
+				msg.obj = result;
+				mHandler.sendMessage(msg);
+				return result;
+			}
+
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public interface WebServiceCallBack {
+		public void callBack(Object result);
+	}
+}

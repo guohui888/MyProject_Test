@@ -1,0 +1,178 @@
+package cn.com.zhoufu.mouth.activity.mine;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.tsz.afinal.FinalDb;
+
+import android.app.Dialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+import cn.com.zhoufu.mouth.activity.cart.SureOrderActivity;
+import cn.com.zhoufu.mouth.adapter.AddreAdapter;
+import cn.com.zhoufu.mouth.adapter.AddressAdapter;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.AddreInfo;
+import cn.com.zhoufu.mouth.model.AddressInfo;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnItemClick;
+import com.lidroid.xutils.view.annotation.event.OnItemLongClick;
+
+public class AddressActivity extends BaseActivity {
+
+	@ViewInject(R.id.right_button2)
+	private Button right_button;
+
+	@ViewInject(R.id.list_view)
+	private ListView mListView;
+
+	private AddressAdapter mAdapter;
+
+	private AddreAdapter mAdapter1;
+
+	private List<AddressInfo> list = new ArrayList<AddressInfo>();
+
+	private List<AddreInfo> list1 = new ArrayList<AddreInfo>();
+
+	private Dialog dialog;
+
+	private int tag;
+
+	FinalDb db;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_address);
+		setTitle("收货地址");
+		initView();
+	}
+
+	public void initView() {
+		db = FinalDb.create(this);
+		right_button.setVisibility(View.VISIBLE);
+		right_button.setText("添加");
+		tag = Integer.parseInt(getIntent().getStringExtra("tag"));
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		initData();
+	}
+
+	private void initData() {
+		if (application.getUser().getUser_id() != 0) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("UserID", application.getUser().getUser_id());
+			showProgress("正在加载中");
+			WebServiceUtils.callWebService(Constant.S_ShippingAddressList, map,
+					new WebServiceCallBack() {
+						public void callBack(Object result) {
+							dismissProgress();
+							Bean bean = JSON.parseObject(result.toString(),
+									Bean.class);
+							int state = bean.getState();
+							switch (state) {
+							case 1:
+								list = JSON.parseArray(bean.getData(),
+										AddressInfo.class);
+								mAdapter = new AddressAdapter(mContext);
+								mAdapter.setList(list);
+								mListView.setAdapter(mAdapter);
+								break;
+							default:
+								break;
+							}
+						}
+					});
+		} else {
+			list1 = db.findAll(AddreInfo.class);
+			mAdapter1 = new AddreAdapter(mContext);
+			mAdapter1.setList(list1);
+			mListView.setAdapter(mAdapter1);
+		}
+	}
+
+	@OnClick(R.id.right_button2)
+	public void addClick(View v) {
+		Intent intent = new Intent(mContext, AddAddressActivity.class);
+		intent.putExtra("tag", "0");
+		startActivity(intent);
+	}
+
+	@OnItemLongClick(R.id.list_view)
+	public boolean onItemLongClickAddress(AdapterView<?> parent, View view,
+			final int position, long id) {
+		if (application.getUser().getUser_id() != 0) {
+			deleteDialog(position);
+		}
+		return false;
+	}
+
+	@OnItemClick(R.id.list_view)
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		Intent intent = new Intent(mContext, SureOrderActivity.class);
+		if (application.getUser().getUser_id() != 0) {
+			intent.putExtra("info", ((AddressInfo) mAdapter.getItem(arg2)));
+		} else {
+			intent.putExtra("info1", ((AddreInfo) mAdapter1.getItem(arg2)));
+		}
+		setResult(RESULT_OK, intent);
+		finish();
+	}
+	private void deleteDialog(final int position) {
+		dialog = new Dialog(mContext, R.style.dialog);
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setContentView(R.layout.dialog_delete);
+		TextView delete = (TextView) dialog.findViewById(R.id.delete);
+		delete.setOnClickListener(new OnClickListener() {
+			HashMap<String, Object> map;
+			public void onClick(View v) {
+				AddressInfo info = (AddressInfo) mAdapter.getItem(position);
+				Log.d("info", info.toString());
+				map = new HashMap<String, Object>();
+				map.put("UserID", application.getUser().getUser_id());
+				map.put("Address_ID", info.getAddress_id());
+
+				WebServiceUtils.callWebService(
+						Constant.S_DeleteShippingAddress, map,
+						new WebServiceCallBack() {
+							public void callBack(Object result) {
+								Bean bean = JSON.parseObject(result.toString(),
+										Bean.class);
+								int state = bean.getState();
+								switch (state) {
+								case 1:
+									mAdapter.remove(position);
+									break;
+								case 0:
+									break;
+								default:
+									break;
+								}
+							}
+						});
+			}
+		});
+		dialog.show();
+
+	}
+}

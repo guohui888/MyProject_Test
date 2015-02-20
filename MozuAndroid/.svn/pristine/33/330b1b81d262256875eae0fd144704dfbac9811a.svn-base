@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ly_empty"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="5dp"
+        android:drawableTop="@drawable/cart_text_bg"
+        android:gravity="center"
+        android:text="您的购物车还是空的\n快去选购吧"
+        android:textColor="@color/gray"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/table_Index_home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/selector_login_btn"
+        android:minHeight="30dp"
+        android:minWidth="150dp"
+        android:text="去逛逛"
+        android:textColor="@color/white" />
+
+</LinearLayout>

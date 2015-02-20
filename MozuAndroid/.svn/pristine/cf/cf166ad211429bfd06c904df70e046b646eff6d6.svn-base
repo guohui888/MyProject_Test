@@ -1,0 +1,330 @@
+/**   
+ * @Title: HomeActivity.java 
+ * @Package cn.com.zhoufu.mouth.activity.home 
+ * @Description: TODO(首页activity) 
+ * @author 王小杰
+ * @date 2014-2-10 
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.activity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.tsz.afinal.FinalDb;
+
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.activity.cart.CartFragment;
+import cn.com.zhoufu.mouth.activity.category.CategoryFragment;
+import cn.com.zhoufu.mouth.activity.home.HomeFragment;
+import cn.com.zhoufu.mouth.activity.mine.MineFragment;
+import cn.com.zhoufu.mouth.activity.search.SearchFragment;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.AddCartInfo;
+import cn.com.zhoufu.mouth.model.AddInfo;
+import cn.com.zhoufu.mouth.model.AddreInfo;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.utils.Utils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+import cn.com.zhoufu.mouth.utils.XMLParser;
+
+import com.alibaba.fastjson.JSON;
+import com.baidu.android.pushservice.CustomPushNotificationBuilder;
+import com.baidu.android.pushservice.PushConstants;
+import com.baidu.android.pushservice.PushManager;
+import com.baidu.android.pushservice.PushSettings;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnCheckedChange;
+
+public class MainActivity extends BaseActivity {
+
+	@ViewInject(R.id.tab_group)
+	private RadioGroup tabGroup;
+
+	@ViewInject(R.id.cart)
+	private RadioButton cart;
+
+	@ViewInject(R.id.product_count)
+	private TextView product_count;
+
+	private int tabIndex;
+
+	private long exitTime = 0;
+
+	private OnForResultListener listener;
+
+	Bundle bundle;
+
+	private BroadcastReceiver receiver;
+
+	private IntentFilter filter;
+
+	private List<AddreInfo> list = new ArrayList<AddreInfo>();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_main);
+		bundle = savedInstanceState;
+		if (savedInstanceState == null)
+			tabIndex = R.id.home;
+		else
+			tabIndex = savedInstanceState.getInt("tabIndex", R.id.home);
+		filter = new IntentFilter(Constant.CART_CONTENT);
+		receiver = new ChangeReceiver();
+		initData();
+		initPush();
+	}
+
+	private void initData() {
+		switch (tabIndex) {
+		case R.id.home:
+			changeContent("home", HomeFragment.class, null);
+			break;
+		case R.id.search:
+			changeContent("search", SearchFragment.class, null);
+			break;
+		case R.id.category:
+			changeContent("category", CategoryFragment.class, null);
+			break;
+		case R.id.cart:
+			changeContent("cart", CartFragment.class, null);
+			break;
+		case R.id.personal:
+			changeContent("personal", MineFragment.class, null);
+			break;
+		default:
+			break;
+		}
+	}
+
+	public interface OnForResultListener {
+		public void onActivityResult(int requestCode, int resultCode,
+				Intent data);
+	}
+
+	public void setListener(OnForResultListener listener) {
+		this.listener = listener;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (listener != null) {
+			listener.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (application.getTag() == 1) {
+			if (bundle == null)
+				tabIndex = R.id.cart;
+			else
+				tabIndex = bundle.getInt("tabIndex", R.id.cart);
+			cart.setChecked(true);
+			application.setTag(2);
+		} else {
+			if (bundle == null)
+				tabIndex = R.id.home;
+			else {
+				tabIndex = bundle.getInt("tabIndex", R.id.home);
+			}
+			application.setTag(2);
+		}
+		if (application.getUser().getUser_id() == 0)
+			product_count.setVisibility(View.GONE);
+		else
+			cartList();
+	}
+
+	@OnCheckedChange(R.id.tab_group)
+	public void onTabRroupChecked(RadioGroup group, int checkedId) {
+		switch (checkedId) {
+		case R.id.home:
+			tabIndex = R.id.home;
+			changeContent("home", HomeFragment.class, null);
+			break;
+		case R.id.search:
+			tabIndex = R.id.search;
+			changeContent("search", SearchFragment.class, null);
+			break;
+		case R.id.category:
+			tabIndex = R.id.category;
+			changeContent("category", CategoryFragment.class, null);
+			break;
+		case R.id.cart:
+			tabIndex = R.id.cart;
+			changeContent("cart", CartFragment.class, null);
+			break;
+		case R.id.personal:
+			tabIndex = R.id.personal;
+			changeContent("personal", MineFragment.class, null);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void changeContent(String tag, Class<?> cls, Bundle bundle) {
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		if (fragment == null) {
+			ft.replace(R.id.content,
+					Fragment.instantiate(this, cls.getName(), bundle), tag);
+		} else {
+			ft.replace(R.id.content, fragment, tag);
+		}
+		ft.addToBackStack(null);
+		ft.commit();
+	}
+
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("tabIndex", tabIndex);
+	}
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			long currentTime = System.currentTimeMillis();
+			if (currentTime - exitTime >= 2000) {
+				application.showToast("再按一次退出程序");
+				exitTime = currentTime;
+			} else {
+				// FinalDb db = FinalDb.create(this);
+				// list = db.findAll(AddreInfo.class);
+				// for (int i = 0; i < list.size(); i++) {
+				// db.deleteById(AddreInfo.class, i+1);
+				// }
+				if (HomeFragment.gpsEnabled) {
+					openGPSSettings();
+				}
+
+				finish();
+				System.exit(0);// 退出程序
+
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	/**
+	 * 直接打开/关闭GPS
+	 */
+	private void openGPSSettings() {
+		Intent gpsIntent = new Intent();
+		gpsIntent.setClassName("com.android.settings",
+				"com.android.settings.widget.SettingsAppWidgetProvider");
+		gpsIntent.addCategory("android.intent.category.ALTERNATIVE");
+		gpsIntent.setData(Uri.parse("custom:3"));
+		try {
+			PendingIntent.getBroadcast(mContext, 0, gpsIntent, 0).send();
+		} catch (CanceledException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private void initPush() {
+		Resources resource = this.getResources();
+		String pkgName = this.getPackageName();
+		PushSettings.enableDebugMode(mContext, true);
+		PushManager.startWork(getApplicationContext(),
+				PushConstants.LOGIN_TYPE_API_KEY,
+				Utils.getMetaValue(this, "api_key"));
+		CustomPushNotificationBuilder cBuilder = new CustomPushNotificationBuilder(
+				getApplicationContext(), resource.getIdentifier(
+						"notification_custom_builder", "layout", pkgName),
+				resource.getIdentifier("notification_icon", "id", pkgName),
+				resource.getIdentifier("notification_title", "id", pkgName),
+				resource.getIdentifier("notification_text", "id", pkgName));
+		cBuilder.setNotificationFlags(Notification.FLAG_AUTO_CANCEL);
+		cBuilder.setNotificationDefaults(Notification.DEFAULT_SOUND
+				| Notification.DEFAULT_VIBRATE);
+		cBuilder.setStatusbarIcon(this.getApplicationInfo().icon);
+		cBuilder.setLayoutDrawable(resource.getIdentifier("icon", "drawable",
+				pkgName));
+		PushManager.setNotificationBuilder(this, 1, cBuilder);
+	}
+
+	public void cartList() {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+
+			product_count.setVisibility(View.GONE);
+			return;
+		}
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("UserID", application.getUser().getUser_id());
+		WebServiceUtils.callWebService(Constant.S_CartList, map,
+				new WebServiceCallBack() {
+
+					public void callBack(Object result) {
+						Log.i("info", result.toString());
+						if (result != null) {
+							Bean bean = JSON.parseObject(result.toString(),
+									Bean.class);
+							List<AddCartInfo> list = JSON.parseArray(
+									bean.getData(), AddCartInfo.class);
+							if (list.size() == 0) {
+								product_count.setVisibility(View.GONE);
+							} else {
+								int number = 0;
+								for (int i = 0; i < list.size(); i++) {
+									number += list.get(i).getGoods_number();
+								}
+								product_count.setText(number + "");
+								product_count.setVisibility(View.VISIBLE);
+							}
+						}
+					}
+				});
+	}
+
+	class ChangeReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			final String action = intent.getAction();
+			// 监听接收到消息的广播
+			if (action.equals(Constant.CART_CONTENT)) {
+				cartList();
+			}
+		}
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		if (receiver.isOrderedBroadcast()) {
+			unregisterReceiver(receiver);
+		}
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		registerReceiver(receiver, filter);
+	}
+}

@@ -1,0 +1,40 @@
+package cn.com.zhoufu.mouth.adapter;
+
+import com.lidroid.xutils.BitmapUtils;
+
+import android.content.Context;
+import android.graphics.Bitmap.Config;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.HomeTwoModel;
+
+public class HomeTwoAdapter extends BaseListAdapter<HomeTwoModel> {
+	BitmapUtils bitmapUtils;
+
+	public HomeTwoAdapter(Context context) {
+		super(context);
+
+		bitmapUtils = new BitmapUtils(context);
+		bitmapUtils.configDefaultLoadingImage(R.drawable.home_two_bg);
+		bitmapUtils.configDefaultLoadFailedImage(R.drawable.home_two_bg);
+		bitmapUtils.configDefaultBitmapConfig(Config.RGB_565);
+	}
+
+	@Override
+	public View getView(int position, View v, ViewGroup parent) {
+		v = (ImageView) mInflater
+				.inflate(R.layout.item_home_gridview_two, null);
+		HomeTwoModel model = mList.get(position);
+		bitmapUtils.display((ImageView) v,
+				Constant.HOME_IMAGE_URL + model.getAd_code());
+		Log.e("", "tag111    =============imageview=" + Constant.HOME_IMAGE_URL
+				+ model.getAd_code());
+		return v;
+
+	}
+
+}

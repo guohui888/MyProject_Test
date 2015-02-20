@@ -1,0 +1,95 @@
+/**   
+ * @Title: ResetPasswordActivity.java 
+ * @Package cn.com.zhoufu.mouth.activity.mine 
+ * @Description: TODO(找回密码activity) 
+ * @author 王小杰
+ * @date 2014-2-11 上午10:42:51 
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.activity.mine;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
+import cn.com.zhoufu.mozu.R;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+
+import com.lidroid.xutils.view.annotation.ViewInject;
+
+public class ResetPasswordActivity extends BaseActivity implements
+		OnCheckedChangeListener {
+
+	@ViewInject(R.id.radioGroup)
+	private RadioGroup radioGroup;
+
+	private int tabIndex; 
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_resetpassword);
+		setTitle("找回密码");
+		if (savedInstanceState == null)
+			tabIndex = R.id.message;
+		else
+			tabIndex = savedInstanceState.getInt("tabIndex", R.id.message);
+		initView();
+		initDate();
+	}
+
+	public void initView() {
+		radioGroup.setOnCheckedChangeListener(this);
+	}
+
+	public void initDate() {
+		switch (tabIndex) {
+		case R.id.message:
+			changeContent("Fragment1", ResetMessageFragment.class, null);
+			break;
+		case R.id.email:
+			showToast("请到PC版使用邮箱找回密码");
+			// changeContent("Fragment2", ResetEmailFragment.class, null);
+			break;
+		}
+	}
+
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		switch (checkedId) {
+		case R.id.message:
+			tabIndex = R.id.message;
+			changeContent("Fragment1", ResetMessageFragment.class, null);
+			break;
+		case R.id.email:
+			showToast("暂不开通.");
+			// tabIndex = R.id.email;
+			// changeContent("Fragment2", ResetEmailFragment.class, null);
+			break;
+		}
+	}
+
+	private void changeContent(String tag, Class<?> cls, Bundle bundle) {
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		if (fragment == null) {
+			ft.replace(R.id.content,
+					Fragment.instantiate(this, cls.getName(), bundle), tag);
+		} else {
+			ft.replace(R.id.content, fragment, tag);
+		}
+		ft.addToBackStack(null);
+		ft.commit();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			finish();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+}

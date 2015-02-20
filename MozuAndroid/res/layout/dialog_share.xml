@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/pop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btn_share_weixin_friend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:drawableLeft="@drawable/share_weixin_friend"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:padding="10dp"
+            android:text="分享到朋友圈"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/split_color" />
+
+        <Button
+            android:id="@+id/btn_share_weixin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:drawableLeft="@drawable/share_weixin"
+            android:drawableRight="@drawable/icon_arrow_right"
+            android:padding="10dp"
+            android:text="分享到微信"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:background="@color/split_color" />
+
+<!--         <Button -->
+<!--             android:id="@+id/btn_share_qzone" -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:background="@color/white" -->
+<!--             android:drawableLeft="@drawable/share_qzone" -->
+<!--             android:drawableRight="@drawable/icon_arrow_right" -->
+<!--             android:padding="10dp" -->
+<!--             android:text="分享到QQ空间" -->
+<!--             android:textColor="@color/black" -->
+<!--             android:textSize="16sp" /> -->
+
+<!--         <View -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="0.1dp" -->
+<!--             android:background="@color/split_color" /> -->
+
+<!--         <Button -->
+<!--             android:id="@+id/btn_share_sina_weibo" -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:background="@color/white" -->
+<!--             android:drawableLeft="@drawable/share_sina_weibo" -->
+<!--             android:drawableRight="@drawable/icon_arrow_right" -->
+<!--             android:padding="10dp" -->
+<!--             android:text="分享到新浪微博" -->
+<!--             android:textColor="@color/black" -->
+<!--             android:textSize="16sp" /> -->
+
+<!--         <View -->
+<!--             android:layout_width="match_parent" -->
+<!--             android:layout_height="0.1dp" -->
+<!--             android:background="@color/split_color" /> -->
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_login_btn"
+            android:padding="10dp"
+            android:text="取消"
+            android:layout_margin="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,99 @@
+/**   
+ * @Title: ResetEmailFragment.java 
+ * @Package cn.com.zhoufu.mouth.activity.mine 
+ * @Description: TODO(找回密码fragment) 
+ * @author 王小杰 
+ * @date 2014-2-11 上午10:45:06 
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.activity.mine;
+
+import java.util.HashMap;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import cn.com.zhoufu.mozu.R;
+import cn.com.zhoufu.mouth.activity.BaseFragment;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.utils.AbStrUtil;
+import cn.com.zhoufu.mouth.utils.CheckTextBox;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+
+public class ResetEmailFragment extends BaseFragment {
+	@ViewInject(R.id.et_reset_email)
+	private EditText mEtResetEmail;
+
+	@ViewInject(R.id.btn_email_pwd)
+	private Button mBtnFindPwd;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_reset_email, container,
+				false);
+		ViewUtils.inject(this, view);
+		return view;
+	}
+
+	@OnClick(R.id.btn_email_pwd)
+	public void onFindPwdClick(View v) {
+		Log.i("info", "找回密码");
+		String email = mEtResetEmail.getText().toString();
+		if (AbStrUtil.isEmpty(email)) {
+			showToast(R.string.error_email);
+			mEtResetEmail.setFocusable(true);
+			mEtResetEmail.requestFocus();
+			return;
+		}
+		if (CheckTextBox.isEmail(email) == false) {
+			showToast(R.string.error_email_expr);
+			mEtResetEmail.setFocusable(true);
+			mEtResetEmail.requestFocus();
+			return;
+		}
+		showProgress("正在验证邮箱...");
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("User_Name", email);
+		map.put("Type", "email");
+		WebServiceUtils.callWebService(Constant.S_GetBackPassword, map,
+				new WebServiceCallBack() {
+
+					public void callBack(Object result) {
+						Log.i("info", result.toString());
+						dismissProgress();
+						Bean bean = JSON.parseObject(result.toString(),
+								Bean.class);
+						int state = bean.getState();
+						Log.e("", "--" + bean.toString());
+						switch (state) {
+						case 1:
+							showToast("发送邮件成功！");
+							getActivity().finish();
+							break;
+						case 0:
+							showToast(bean.getMsg());
+							break;
+						default:
+							break;
+						}
+					}
+				});
+	}
+}

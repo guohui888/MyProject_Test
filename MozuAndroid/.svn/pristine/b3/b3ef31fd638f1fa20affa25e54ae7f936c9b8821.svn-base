@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="default_bg_color">#f8f8f8</color>
+    <color name="orange">#FFA011</color>
+    <color name="red">#DF5431</color>
+    <color name="purple">#B551A5</color>
+    <color name="air">#44DAFF</color>
+    <color name="texi">#6CB5B5</color>
+    <color name="jingdian">#A7B56C</color>
+    <color name="white">#ffffffff</color>
+    <color name="white_1">#6fffffff</color>
+    <color name="background">#f5f5f5</color>
+    <color name="background2">#f5f5f5</color>
+    <color name="backgroud">#ffececec</color>
+    <color name="black">#ff000000</color>
+    <color name="unfocused">#ffffffff</color>
+    <color name="bule2">#ff576b95</color>
+    <color name="blue">#ff33b5e5</color>
+    <color name="gove_bg_color">#f7f7f7</color>
+    <color name="pressed">#FFEBEDCF</color>
+    <color name="selected">#FFEBEDCF</color>
+    <color name="transparent_background">#50000000</color>
+    <color name="header_bg_color">#5d9cec</color>
+    <color name="transparent">#00000000</color>
+    <color name="gray">#ff999999</color>
+    <color name="gray2">#c5c5c5</color>
+    <color name="gray3">#666666</color>
+    <color name="gray4">#5f5f5f</color>
+    <color name="red2">#db120f</color>
+    <color name="setting_text_color">#554639</color>
+    <color name="get_checkcode_hint_text_color">#7d7d7d</color>
+    <color name="register_radiobutton_text_color">#b3b3b3</color>
+    <color name="third_party_login_text_color">#bbbbbb</color>
+    <color name="word_number_color">#5b5b5b</color>
+    <color name="split_color">#dadada</color>
+    <color name="message_center_text_color">#343434</color>
+    <color name="user_center_text_color">#313131</color>
+    <color name="price_red_color">#c42943</color>
+    <color name="price_gray_color">#9a9a9a</color>
+    <color name="product_detail_image_page_textcolor">#ff8b8b8b</color>
+    <color name="home_text_color">#434343</color>
+    <color name="dark">#FF222222</color>
+    <color name="light">#FFEEEEEE</color>
+    <color name="cate_item_text_color">#a1a0a0</color>
+    <color name="search_cate_text_color_normal">#575757</color>
+    <color name="search_cate_text_color_selected">#b90b08</color>
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+    <!-- 灰色文本 -->
+    <color name="gray_text">#ff656565</color>
+    <color name="home_buttom_1">#ff97c103</color>
+    <color name="home_buttom_2">#ffeaac1c</color>
+    <color name="home_buttom_3">#fff8873c</color>
+    <color name="home_buttom_4">#ffe9322c</color>
+
+</resources>

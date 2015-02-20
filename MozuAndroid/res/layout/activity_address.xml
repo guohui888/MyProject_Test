@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
+
+    <include layout="@layout/activity_header" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ListView
+            android:id="@+id/list_view"
+            style="@style/listview_style"
+            android:layout_margin="10dp"
+            android:divider="@color/transparent"
+            android:dividerHeight="10dp" />
+
+        <TextView
+            android:id="@+id/myText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="赶紧添加收获地址吧、、"
+            android:textColor="@color/search_cate_text_color_normal"
+            android:textSize="20sp" />
+    </FrameLayout>
+
+</LinearLayout>

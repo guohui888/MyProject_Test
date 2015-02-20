@@ -1,0 +1,25 @@
+﻿/*
+ * Copyright (C) 2010 The MobileSecurePay Project
+ * All right reserved.
+ * author: shiqun.shi@alipay.com
+ * 
+ *  提示：如何获取安全校验码和合作身份者id
+ *  1.用您的签约支付宝账号登录支付宝网站(www.alipay.com)
+ *  2.点击“商家服务”(https://b.alipay.com/order/myorder.htm)
+ *  3.点击“查询合作者身份(pid)”、“查询安全校验码(key)”
+ */
+
+package cn.com.zhoufu.mouth.activity.cart.pay;
+
+public final class Keys {
+
+	public static final String DEFAULT_PARTNER = "2088011586465105";
+
+	public static final String DEFAULT_SELLER = "69175942@qq.com";
+
+	// public static final String PRIVATE =
+	// "MIICXQIBAAKBgQDtDPndDs1MvogOQrQ6x1tKhcwn1T5XY/cYql2lviiaUvAllKzQtYFZ3wcLmjZfbM7RXEEBn2Uvr/0Li1jnWoBH11dKC7G2MBXipKgLJrWVpwrwL9OANxU/hL8Dz4ptsKH2NxBqKye/QZfs6jrvqIkm1w94JxWvaY7dPyBq6BdtYwIDAQABAoGBAJYnlwpQuvi24+XsmM92wjwFXpmIuRGQL8/+8ozvVDbU/GtBruoRXts3q/XMfE6b1LHHNyI4/lZjqu0qGmmJ6SDgimHGuViCJe3KHUJIGlHuuM12vyjicMIoIncP03r0SoOejr2gE8WLNVQQecu+s2WrNT6LJCjA2fupPwO3OHdRAkEA+Tan6X3B3wzJaM3sibwG8Jg9q9XNA8GquAipCgYpCVWn9K2ySloysJjI63ALXQTRrtSZNrMtP6dVTT99nqElSwJBAPOBh4eVXOB1feZB4PZHJBuiMteVYroaVOmxMq4EnjIuvJm0WKiYxsSrJ3ACNlcnFtamkYHK0c6ep80CeWZrgUkCQQCWh/8QuFd8hVq7JXd1EtAWT78gpjn5xOd71i9U0LfE3apfzvNcmfL4XLEwFTOn8hs9wUjyk3QHeOm7iVg1kxzVAkAVA+DGesWBOaKb9KONnaYoHF9265WRqiQZ5wkQq6Vbf10XhtD/++9rmbnVmNtHuj/mVonIQdDJnDevIb+Ib07BAkBflfh0SrWDx6OXTQMICzTYD7h4c8UrKvbfqnTV43gcs13c3MRFrGqHCicszmXj/yAKsncAbKt6ejsFSAdmk9Cy";
+
+	public static final String PRIVATE = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAO0M+d0OzUy+iA5CtDrHW0qFzCfVPldj9xiqXaW+KJpS8CWUrNC1gVnfBwuaNl9sztFcQQGfZS+v/QuLWOdagEfXV0oLsbYwFeKkqAsmtZWnCvAv04A3FT+EvwPPim2wofY3EGorJ79Bl+zqOu+oiSbXD3gnFa9pjt0/IGroF21jAgMBAAECgYEAlieXClC6+Lbj5eyYz3bCPAVemYi5EZAvz/7yjO9UNtT8a0Gu6hFe2zer9cx8TpvUscc3Ijj+VmOq7SoaaYnpIOCKYca5WIIl7codQkgaUe64zXa/KOJwwigidw/TevRKg56OvaATxYs1VBB5y76zZas1PoskKMDZ+6k/A7c4d1ECQQD5NqfpfcHfDMlozeyJvAbwmD2r1c0Dwaq4CKkKBikJVaf0rbJKWjKwmMjrcAtdBNGu1Jk2sy0/p1VNP32eoSVLAkEA84GHh5Vc4HV95kHg9kckG6Iy15ViuhpU6bEyrgSeMi68mbRYqJjGxKsncAI2VycW1qaRgcrRzp6nzQJ5ZmuBSQJBAJaH/xC4V3yFWrsld3US0BZPvyCmOfnE53vWL1TQt8Tdql/O81yZ8vhcsTAVM6fyGz3BSPKTdAd46buJWDWTHNUCQBUD4MZ6xYE5opv0o42dpigcX3brlZGqJBnnCRCrpVt/XReG0P/772uZudWY20e6P+ZWichB0MmcN68hv4hvTsECQF+V+HRKtYPHo5dNAwgLNNgPuHhzxSsq9t+qdNXjeByzXdzcxEWsaocKJyzOZeP/IAqydwBsq3p6OwVIB2aT0LI=";
+	public static final String PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnxj/9qwVfgoUh/y2W89L6BkRAFljhNhgPdyPuBV64bfQNN1PjbCzkIM6qRdKBoLPXmKKMiFYnkd6rAoprih3/PrQEB/VsW8OoM8fxn67UDYuyBTqA23MML9q1+ilIZwBC2AQ2UBVOrFXfFl75p6/B5KsiNG9zpgmLCUYuLkxpLQIDAQAB";
+}

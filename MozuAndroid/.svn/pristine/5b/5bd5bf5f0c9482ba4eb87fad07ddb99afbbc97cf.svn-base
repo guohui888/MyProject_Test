@@ -1,0 +1,66 @@
+/**   
+ * @Title: SearchAdapter.java 
+ * @Package cn.com.zhoufu.mouth.adapter 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-13 下午5:36:09
+ * @version V1.0   
+ */
+
+package cn.com.zhoufu.mouth.adapter;
+
+import android.content.Context;
+import android.graphics.Bitmap.Config;
+import android.graphics.Paint;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.R;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.SearchInfo;
+import cn.com.zhoufu.mouth.utils.AbViewUtil;
+
+public class SearchAdapter extends BaseListAdapter<SearchInfo> {
+
+	public SearchAdapter(Context context) {
+		super(context);
+		application.bitmapUtils.configDefaultLoadingImage(R.drawable.default_bg2);
+		application.bitmapUtils.configDefaultLoadFailedImage(R.drawable.default_bg2);
+		application.bitmapUtils.configDefaultBitmapConfig(Config.RGB_565);
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.listitem_collect, null);
+			viewHolder = new ViewHolder();
+			viewHolder.tvGoods_name = (TextView) convertView.findViewById(R.id.tvGoods_name);
+			viewHolder.shop_price = (TextView) convertView.findViewById(R.id.shop_price);
+			viewHolder.market_price = (TextView) convertView.findViewById(R.id.market_price);
+			viewHolder.deleteBtn = (Button) convertView.findViewById(R.id.deleteBtn);
+			viewHolder.ivImageUrl = (ImageView) convertView.findViewById(R.id.ivImageUrl);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		SearchInfo info = mList.get(position);
+		viewHolder.tvGoods_name.setText(info.getGoods_name());
+		viewHolder.market_price.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+		viewHolder.shop_price.setText(AbViewUtil.changTVsize("￥" + info.getShop_price()));
+		viewHolder.deleteBtn.setVisibility(View.GONE);
+		viewHolder.market_price.setText("￥" + info.getMarket_price());
+		application.bitmapUtils.display(viewHolder.ivImageUrl, Constant.IMAGE_URL + info.getGoods_img());
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView tvGoods_name;
+		TextView shop_price;
+		TextView market_price;
+		Button deleteBtn;
+		ImageView ivImageUrl;
+	}
+
+}

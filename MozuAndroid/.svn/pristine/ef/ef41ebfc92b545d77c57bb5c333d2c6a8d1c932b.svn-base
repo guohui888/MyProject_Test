@@ -1,0 +1,312 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.com.zhoufu.mouth"
+    android:versionCode="28"
+    android:versionName="1.2.8" >
+
+    <uses-sdk android:minSdkVersion="8" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.DEVICE_ADMIN_ENABLED" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Push service 运行需要的权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <!-- 百度地图运行需要的权限 -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
+    <permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
+    </permission>
+
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" >
+    </uses-permission>
+    <!-- <uses-permission android:name="android.permission.WRITE_APN_SETTINGS"></uses-permission> -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
+    </uses-permission>
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CAMERA" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 来电消音 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
+    <!-- Zxing二维码运行需要的权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:name=".ZFApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="false"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".WelcomeActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 引导页 -->
+        <activity
+            android:name=".GuideActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <!-- 首页 -->
+        <activity
+            android:name=".activity.MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <!-- 扫描二维码 -->
+        <activity
+            android:name=".activity.home.MipcaActivityCapture"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <!-- 地图 -->
+        <activity
+            android:name=".activity.home.MapsActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".MipcaActivityCapture"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <activity
+            android:name=".activity.home.PromotionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.home.SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <!-- 个人中心 -->
+        <activity
+            android:name=".activity.mine.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.ResetPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.OrderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.OrderDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.CollectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.MessageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.MessageDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.AddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.mine.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <!-- 设置 -->
+        <activity
+            android:name=".activity.setting.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.setting.FeedBackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.setting.AboutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <!-- 搜索 -->
+        <activity
+            android:name=".activity.category.SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.cart.ProductDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.cart.SureOrderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.cart.CommentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.cart.EditCommentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+        <activity
+            android:name=".activity.search.SearchResultActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Present" />
+
+        <receiver
+            android:name="cn.com.zhoufu.mouth.receiver.CartReceiver"
+            android:label="CartReceiver" >
+            <intent-filter android:priority="600" >
+                <action android:name="CART_CONTENT" />
+            </intent-filter>
+        </receiver>
+        <!-- push应用定义消息receiver声明 -->
+        <receiver android:name="cn.com.zhoufu.mouth.receiver.MyPushMessageReceiver" >
+            <intent-filter>
+
+                <!-- 接收push消息 -->
+                <action android:name="com.baidu.android.pushservice.action.MESSAGE" />
+                <!-- 接收bind,unbind,fetch,delete等反馈消息 -->
+                <action android:name="com.baidu.android.pushservice.action.RECEIVE" />
+                <action android:name="com.baidu.android.pushservice.action.notification.CLICK" />
+            </intent-filter>
+        </receiver>
+
+        <!-- push必须的receviver和service声明 -->
+        <receiver
+            android:name="com.baidu.android.pushservice.PushServiceReceiver"
+            android:process=":bdservice_v1" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="com.baidu.android.pushservice.action.notification.SHOW" />
+                <action android:name="com.baidu.android.pushservice.action.media.CLICK" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.baidu.android.pushservice.RegistrationReceiver"
+            android:process=":bdservice_v1" >
+            <intent-filter>
+                <action android:name="com.baidu.android.pushservice.action.METHOD" />
+                <action android:name="com.baidu.android.pushservice.action.BIND_SYNC" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+        <service
+            android:name="com.baidu.android.pushservice.PushService"
+            android:exported="true"
+            android:process=":bdservice_v1" />
+        <!-- push结束 -->
+        <!-- 在百度开发者中心查询应用的API Key -->
+        <meta-data
+            android:name="api_key"
+            android:value="5Hp0wdGUpjhS0i8rbFTZbQZl" />
+
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- 100380359 100381104 222222 -->
+                <data android:scheme="tencent101045981" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+    </application>
+
+</manifest>

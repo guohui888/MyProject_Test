@@ -1,0 +1,43 @@
+/**   
+* @Title: Categary2Adapter.java 
+* @Package cn.com.zhoufu.mouth.adapter 
+* @Description: TODO(用一句话描述该文件做什么) 
+* @author 王小杰   
+* @date 2014-2-13 下午3:04:02
+* @version V1.0   
+*/ 
+package cn.com.zhoufu.mouth.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import cn.com.zhoufu.mozu.R;
+import cn.com.zhoufu.mouth.model.CategaryInfo;
+
+public class Categary2Adapter extends BaseListAdapter<CategaryInfo> {
+
+	public Categary2Adapter(Context context) {
+		super(context);
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.listitem_cate2, null);
+			viewHolder = new ViewHolder();
+			viewHolder.cat_name = (TextView) convertView.findViewById(R.id.name);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		CategaryInfo info = mList.get(position);
+		viewHolder.cat_name.setText(info.getCat_name());
+		return convertView;
+	}
+
+	static class ViewHolder {
+		TextView cat_name;
+	}
+
+}

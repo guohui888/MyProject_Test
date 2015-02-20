@@ -1,0 +1,837 @@
+package cn.com.zhoufu.mouth.activity.cart;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import cn.com.zhoufu.mouth.ZFApplication;
+import cn.com.zhoufu.mouth.activity.BaseActivity;
+import cn.com.zhoufu.mouth.activity.MainActivity;
+import cn.com.zhoufu.mouth.activity.mine.LoginActivity;
+import cn.com.zhoufu.mouth.adapter.CascadeAdapter;
+import cn.com.zhoufu.mouth.adapter.ProductAdapter;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.AddCartInfo;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.model.CascadeInfo;
+import cn.com.zhoufu.mouth.model.CommodityInfo;
+import cn.com.zhoufu.mouth.model.DataInfo;
+import cn.com.zhoufu.mouth.model.SearchInfo;
+import cn.com.zhoufu.mouth.model.StockInfo;
+import cn.com.zhoufu.mouth.utils.TimeConvertUtils;
+import cn.com.zhoufu.mouth.utils.Util;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+import cn.com.zhoufu.mouth.utils.XMLParser;
+import cn.com.zhoufu.mozu.R;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.bitmap.BitmapDisplayConfig;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadCallBack;
+import com.lidroid.xutils.bitmap.callback.BitmapLoadFrom;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnCheckedChange;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.SendMessageToWX;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.sdk.openapi.WXMediaMessage;
+import com.tencent.mm.sdk.openapi.WXWebpageObject;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.UiError;
+
+public class ProductDetailActivity extends BaseActivity implements
+		OnClickListener, OnPageChangeListener {
+
+	@ViewInject(R.id.radioGroups)
+	private RadioGroup radioGroup;
+
+	private int tabIndex;
+
+	@ViewInject(R.id.product_detail_share)
+	private Button product_detail_share;
+
+	@ViewInject(R.id.right_button3)
+	private ImageView right_button3;
+
+	@ViewInject(R.id.goods_name)
+	private TextView goods_name;
+
+	@ViewInject(R.id.goods_show_price)
+	private TextView goods_show_price;
+
+	@ViewInject(R.id.goods_market_price)
+	private TextView goods_market_price;
+
+	@ViewInject(R.id.goods_discount)
+	private TextView goods_discount;
+
+	@ViewInject(R.id.goods_save)
+	private TextView goods_save;
+
+	@ViewInject(R.id.brand_name)
+	private TextView brand_name;
+
+	@ViewInject(R.id.goods_sn)
+	private TextView goods_sn;
+
+	@ViewInject(R.id.viewGroup)
+	private LinearLayout viewGroup;
+
+	@ViewInject(R.id.adv_pager)
+	private ViewPager mViewPager;
+
+	@ViewInject(R.id.product_collect_button_new)
+	private ImageButton product_collect_button_new;
+
+	@ViewInject(R.id.down_product)
+	private Button down_product;
+
+	@ViewInject(R.id.add_product)
+	private Button add_product;
+
+	@ViewInject(R.id.product_cart_button_new)
+	private Button product_cart_button_new;
+
+	@ViewInject(R.id.ratingBar)
+	private RatingBar ratingBar;
+
+	@ViewInject(R.id.ly_comment)
+	private TextView ly_comment;
+
+	@ViewInject(R.id.product_count)
+	private TextView product_count;
+
+	@ViewInject(R.id.district)
+	private TextView mTvDistrict;
+
+	@ViewInject(R.id.place)
+	private TextView mTvPlace;
+
+	@ViewInject(R.id.isstore)
+	private TextView isStore;
+
+	@ViewInject(R.id.now_pay)
+	private Button now_payButton;
+
+	@ViewInject(R.id.imageview)
+	private ImageView mImg;
+
+	private ImageView[] imageViews = null;
+
+	private ImageView imageView = null;
+
+	private Dialog dialog;
+
+	private CascadeAdapter mAdapter;
+
+	private SearchInfo info;
+
+	List<CascadeInfo> list = new ArrayList<CascadeInfo>();
+
+	private ScheduledExecutorService scheduledExecutorService;
+
+	private int currentItem = 0;
+
+	Sina sina;
+
+	int number = 1, isCollect, state, starlevel;
+
+	private int regionId = 3409;
+
+	private ScrollView scrollView;
+
+	private FrameLayout frameLayout;
+
+	private AddCartInfo addCartInfo;
+
+	private ArrayList<AddCartInfo> listSelect;
+
+	private double totalPrice;
+
+	IWXAPI api;
+
+	public static boolean islogin;
+	List<CommodityInfo> list1;
+
+	private int index;
+
+	private int good_number;// 库存
+
+	private StockInfo stockInfo;// 库存信息
+
+	private int currentCount;// 当前购物车里面商品的数量
+
+	private String price;
+
+	private Bitmap shareBmp;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setLayout(this, R.layout.activity_product_detail);
+		scrollView = (ScrollView) findViewById(R.id.scrollView);
+		frameLayout = (FrameLayout) findViewById(R.id.fy_content);
+		listSelect = new ArrayList<AddCartInfo>();
+		totalPrice = 0.0;
+		TelephonyManager tm = (TelephonyManager) this
+				.getSystemService(TELEPHONY_SERVICE);
+		String Imei = tm.getDeviceId();
+		frameLayout.setMinimumHeight(600);
+		setTitle("商品详情");
+		product_count.setVisibility(0);
+		if (savedInstanceState == null) {
+			tabIndex = R.id.goods_desc;
+			scrollView.smoothScrollTo(0, 0);
+		} else {
+			tabIndex = savedInstanceState.getInt("tabIndex", R.id.goods_desc);
+		}
+		info = (SearchInfo) getIntent().getSerializableExtra("info");
+		index = getIntent().getExtras().getInt("index");
+		price = getIntent().getExtras().getString("price");
+		Log.e("", "---------" + info.toString());
+		addCartInfo = new AddCartInfo();
+		if (application.getUser().getUser_id() != 0) {
+			addCartInfo.setUser_id(application.getUser().getUser_id());
+			addCartInfo.setGoods_id(info.getGoods_id());
+			addCartInfo.setGoods_sn(info.getGoods_sn());
+			addCartInfo.setGoods_number(number);
+			addCartInfo.setGoods_name(info.getGoods_name());
+			addCartInfo.setMarket_price(info.getMarket_price() + "");
+			// if (index == 0) {
+			// if (info.getIs_promote() == 1
+			// && (info.getPresenttime() > info
+			// .getPromote_start_date())
+			// && (info.getPresenttime() < info.getPromote_end_date())) {
+			// addCartInfo.setGoods_price(info.getPromote_price() + "");
+			// } else {
+			addCartInfo.setGoods_price(info.getShop_price() + "");
+			// }
+			// } else if (index == 1) {
+			// addCartInfo.setGoods_price(info.getShop_price() + "");
+			// }
+		} else {
+			addCartInfo.setUser_id(0);
+			addCartInfo.setGoods_id(info.getGoods_id());
+			addCartInfo.setGoods_sn(info.getGoods_sn());
+			addCartInfo.setGoods_number(number);
+			addCartInfo.setGoods_name(info.getGoods_name());
+			addCartInfo.setMarket_price(info.getMarket_price() + "");
+			// if (info.getIs_promote() == 1
+			// && (info.getPresenttime() > info.getPromote_start_date())
+			// && (info.getPresenttime() < info.getPromote_end_date())
+			// && info.getPromote_num() == 0) {
+			// addCartInfo.setGoods_price(info.getPromote_price() + "");
+			// } else {
+			addCartInfo.setGoods_price(info.getShop_price() + "");
+			// }
+			addCartInfo.setSession_id(Imei);
+		}
+		listSelect.add(addCartInfo);
+		totalPrice = Double.parseDouble(addCartInfo.getGoods_price());
+		initDate();
+		sina = new Sina(mContext, application);
+		initView();
+		cartList();
+		Log.e("bitmap", "=====  " + Constant.IMAGE_URL + info.getGoods_img());
+		application.bitmapUtils.display(mImg,
+				Constant.IMAGE_URL + info.getGoods_img(),
+				new BitmapLoadCallBack<View>() {
+
+					@Override
+					public void onLoadCompleted(View arg0, String arg1,
+							Bitmap arg2, BitmapDisplayConfig arg3,
+							BitmapLoadFrom arg4) {
+						// TODO Auto-generated method stub
+						shareBmp = arg2;
+						Log.e("bitmap", "=====  -------------------"
+								+ Constant.IMAGE_URL + info.getGoods_img());
+					}
+
+					@Override
+					public void onLoadFailed(View arg0, String arg1,
+							Drawable arg2) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+	}
+
+	public void initDate() {
+		Bundle bundle = new Bundle();
+		bundle.putString("id", info.getGoods_id() + "");
+		switch (tabIndex) {
+		case R.id.goods_attribute:
+			changeContent("GoodsAttributeFragment",
+					GoodsAttributeFragment.class, bundle);
+			break;
+		case R.id.goods_desc:
+			changeContent("GoodsDescFragment", GoodsDescFragment.class, bundle);
+			break;
+		case R.id.related_article:
+			changeContent("RelatedArticleFragment",
+					RelatedArticleFragment.class, bundle);
+			break;
+		}
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+	}
+
+	public void initView() {
+		right_button3.setVisibility(View.VISIBLE);
+		goods_name.setText(info.getGoods_name());
+		api = WXAPIFactory.createWXAPI(getApplicationContext(),
+				Constant.weixin_APP_ID, true);
+		api.registerApp(Constant.weixin_APP_ID);
+		goods_show_price.setText(price);
+		goods_market_price.setText("￥" + info.getMarket_price());
+		goods_market_price.getPaint().setFlags(
+				Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+		// goods_sn.setText(info.getGoods_sn());
+		brand_name.setText(info.getBrand_name());
+		Log.e("tag", info.getGoods_name() + "");
+		Log.e("", "------====  " + price);
+		goods_save
+				.setText("￥"
+						+ TimeConvertUtils.sub(
+								info.getMarket_price(),
+								Double.parseDouble(price.substring(1,
+										price.length()))));
+		try {
+			BigDecimal b1 = new BigDecimal(
+					(info.getShop_price() / info.getMarket_price()) * 10);
+			double discount = b1.setScale(1, BigDecimal.ROUND_HALF_UP)
+					.doubleValue();
+			goods_discount.setText(discount + "");
+		} catch (Exception e) {
+			goods_discount.setText("0.0");
+		}
+
+		picdetatil();
+		// GoodClick(info.getGoods_id());
+		now_payButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (application.getUser().getUser_id() == 0) {
+					islogin = false;
+				} else {
+					islogin = true;
+				}
+				Intent intent = new Intent(mContext, SureOrderActivity.class);
+				intent.putExtra("list", listSelect);
+				intent.putExtra("totalPrice", totalPrice + "");
+				startActivity(intent);
+			}
+		});
+		showDefaultProgress();
+	}
+
+	public void picdetatil() {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("Goods_ID", info.getGoods_id());
+		map.put("User_ID", application.getUser().getUser_id());
+		WebServiceUtils.callWebService(Constant.S_CommodityDetail, map,
+				new WebServiceCallBack() {
+					public void callBack(Object result) {
+						Log.i("info", result.toString());
+						dismissProgress();
+						Bean bean = JSON.parseObject(result.toString(),
+								Bean.class);
+						DataInfo info = JSON.parseObject(bean.getData(),
+								DataInfo.class);
+						if (info.getIsAttention() == 1) {
+							isCollect = 1;
+							product_collect_button_new
+									.setBackgroundResource(R.drawable.is_collect);
+						} else {
+							isCollect = 0;
+							product_collect_button_new
+									.setBackgroundResource(R.drawable.product_detail_new_collect);
+						}
+						if (info.getStarlevel() == ""
+								|| "".equals(info.getStarlevel())) {
+							starlevel = 0;
+							ratingBar.setRating(starlevel);
+						} else {
+							ratingBar.setRating(Float.parseFloat(info
+									.getStarlevel()));
+						}
+						list1 = JSON.parseArray(info.getPicturelist(),
+								CommodityInfo.class);
+						Log.e("", "list1==" + list1.size());
+						initViewPager(list1);
+					}
+				});
+	}
+
+	@OnClick(R.id.ly_comment)
+	public void ClickComment(View v) {
+		Intent intent = new Intent(mContext, CommentActivity.class);
+		intent.putExtra("productId", info.getGoods_id() + "");
+		startActivity(intent);
+	}
+
+	@OnClick(R.id.right_button3)
+	public void ClickCart(View v) {
+		// application.setTag(1);
+		// Intent intent = new Intent(mContext, MainActivity.class);
+		// startActivity(intent);
+		// mActivity.getSupportFragmentManager().beginTransaction()
+		// .replace(R.id.content, CartFragment.instantiate(mContext,
+		// CartFragment.class.getName())).commit();
+		mActivity.sendBroadcast(new Intent(
+				MainActivity.ACTION_CHANGE_RADIOBUTTON_CART));
+		application.finishOtherAct();
+	}
+
+	public void initViewPager(List<CommodityInfo> list) {
+		if (imageViews != null) {
+			viewGroup.removeAllViews();
+		}
+		imageViews = new ImageView[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			imageView = new ImageView(this);
+			imageView.setLayoutParams(new LayoutParams(
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.WRAP_CONTENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
+			lp.setMargins(10, 5, 0, 5);
+			imageView.setLayoutParams(lp);
+			imageViews[i] = imageView;
+			if (i == 0) {
+				imageViews[i].setBackgroundResource(R.drawable.dot_focus);
+			} else {
+				imageViews[i].setBackgroundResource(R.drawable.dot_normal);
+			}
+			viewGroup.addView(imageViews[i]);
+		}
+		mViewPager.setAdapter(new ProductAdapter(mContext, list1));
+		mViewPager.setOnPageChangeListener(this);
+	}
+
+	@SuppressLint("NewApi")
+	@OnCheckedChange(R.id.radioGroups)
+	public void onCheckedChanged(RadioGroup group, int checkedId) {
+		Bundle bundle = new Bundle();
+		bundle.putString("id", info.getGoods_id() + "");
+		switch (checkedId) {
+		case R.id.goods_attribute:
+			tabIndex = R.id.goods_attribute;
+			changeContent("GoodsAttributeFragment",
+					GoodsAttributeFragment.class, bundle);
+			break;
+		case R.id.goods_desc:
+			tabIndex = R.id.goods_desc;
+			changeContent("GoodsDescFragment", GoodsDescFragment.class, bundle);
+			break;
+
+		case R.id.related_article:
+			tabIndex = R.id.related_article;
+			changeContent("RelatedArticleFragment",
+					RelatedArticleFragment.class, bundle);
+			break;
+
+		}
+	}
+
+	private void changeContent(String tag, Class<?> cls, Bundle bundle) {
+		Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		if (fragment == null) {
+			ft.replace(R.id.fy_content,
+					Fragment.instantiate(this, cls.getName(), bundle), tag);
+		} else {
+			ft.replace(R.id.fy_content, fragment, tag);
+		}
+		ft.addToBackStack(null);
+		ft.commit();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			finish();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@OnClick(R.id.product_detail_share)
+	public void share(View v) {
+		dialog = new Dialog(mContext, R.style.dialog);
+		dialog.setCancelable(true);
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.setContentView(R.layout.dialog_share);
+		Button btn_share_weixin_friend = (Button) dialog
+				.findViewById(R.id.btn_share_weixin_friend);
+		Button btn_share_weixin = (Button) dialog
+				.findViewById(R.id.btn_share_weixin);
+		// Button btn_share_qzone = (Button) dialog
+		// .findViewById(R.id.btn_share_qzone);
+		// Button btn_share_sina_weibo = (Button) dialog
+		// .findViewById(R.id.btn_share_sina_weibo);
+		Button btn_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+
+		btn_share_weixin_friend.setOnClickListener(this);
+		btn_share_weixin.setOnClickListener(this);
+		// btn_share_qzone.setOnClickListener(this);
+		// btn_share_sina_weibo.setOnClickListener(this);
+		btn_cancel.setOnClickListener(this);
+		WindowManager m = getWindowManager();
+		Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
+		WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+		params.width = (int) (d.getWidth()); // 宽度设置为屏幕的0.8
+		params.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.8
+		Window window = dialog.getWindow();
+		window.setGravity(Gravity.BOTTOM); // 此处可以设置dialog显示的位置
+
+		dialog.show();
+	}
+
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_share_weixin_friend:
+			dialog.dismiss();
+			sendReq(mContext, 1);
+			showToast("分享到微信朋友圈");
+			break;
+		case R.id.btn_share_weixin:
+			dialog.dismiss();
+			sendReq(mContext, 2);
+			showToast("分享到微信");
+			break;
+		// case R.id.btn_share_qzone:
+		// dialog.dismiss();
+		// final Bundle params = new Bundle();
+		// params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE,
+		// QQShare.SHARE_TO_QQ_TYPE_DEFAULT);
+		// params.putString(QQShare.SHARE_TO_QQ_TITLE, "大嘴巴商城");
+		// params.putString(QQShare.SHARE_TO_QQ_SUMMARY, info.getGoods_name());
+		// params.putString(QQShare.SHARE_TO_QQ_TARGET_URL,
+		// "http://www.qq.com");
+		// ArrayList<String> imageUrls = new ArrayList<String>();
+		// imageUrls.add(ProductAdapter.url);
+		// params.putStringArrayList(QQShare.SHARE_TO_QQ_IMAGE_URL, imageUrls);
+		// doShareToQzone(params);
+		// break;
+		// case R.id.btn_share_sina_weibo:
+		// dialog.dismiss();
+		// application.setShareContent("大嘴巴");
+		// application.setPicPath(ProductAdapter.url);
+		// sina.sinaInstance();
+		// break;
+		case R.id.btn_cancel:
+			dialog.dismiss();
+			break;
+		default:
+			break;
+		}
+	}
+
+	private static final int THUMB_SIZE = 150;
+
+	public void sendReq(Context context, int type) {
+		String url = "http://www.mzzkd.com/goods_intro.php?goods_id="
+				+ info.getGoods_id();// 收到分享的好友点击信息会跳转到这个地址去
+		WXWebpageObject webpage = new WXWebpageObject();
+		webpage.webpageUrl = url;
+		WXMediaMessage msg = new WXMediaMessage(webpage);
+		msg.title = "模组折扣";
+		msg.description = info.getGoods_name();
+		if (shareBmp != null) {
+			Bitmap bim = Bitmap.createScaledBitmap(shareBmp, THUMB_SIZE,
+					THUMB_SIZE, true);
+			msg.thumbData = Util.bmpToByteArray(bim, false);
+		}
+		SendMessageToWX.Req localReq = new SendMessageToWX.Req();
+		localReq.transaction = System.currentTimeMillis() + "";
+		localReq.message = msg;
+		localReq.scene = type == 1 ? SendMessageToWX.Req.WXSceneTimeline
+				: SendMessageToWX.Req.WXSceneSession;
+		IWXAPI api = WXAPIFactory.createWXAPI(context, Constant.weixin_APP_ID,
+				true);
+		api.sendReq(localReq);
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+//		shareBmp.recycle();
+//		shareBmp = null;
+//		System.gc();
+	}
+
+	private void doShareToQzone(final Bundle params) {
+		final Activity activity = ProductDetailActivity.this;
+		new Thread(new Runnable() {
+
+			public void run() {
+				mTencent.shareToQzone(activity, params, new IUiListener() {
+
+					@Override
+					public void onCancel() {
+						Util.toastMessage(activity, "onCancel: ");
+					}
+
+					@Override
+					public void onError(UiError e) {
+						// TODO Auto-generated method stub
+						Util.toastMessage(activity, "onError: "
+								+ e.errorMessage, "e");
+					}
+
+					public void onComplete(Object arg0) {
+						Util.toastMessage(activity,
+								"onComplete: " + arg0.toString());
+
+					}
+				});
+			}
+		}).start();
+	}
+
+	public void onPageScrollStateChanged(int arg0) {
+
+	}
+
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+	}
+
+	public void onPageSelected(int arg0) {
+		for (int i = 0; i < imageViews.length; i++) {
+			imageViews[arg0].setBackgroundResource(R.drawable.dot_focus);
+			if (arg0 != i) {
+				imageViews[i].setBackgroundResource(R.drawable.dot_normal);
+			}
+		}
+	}
+
+	// 切换当前显示的图片
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			mViewPager.setCurrentItem(currentItem);// 切换当前显示的图片
+		};
+	};
+
+	public void onStart() {
+		super.onStart();
+		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		// 当Activity显示出来后，每两秒钟切换一次图片显示
+		scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 1, 5,
+				TimeUnit.SECONDS);
+		application = (ZFApplication) getApplication();
+	};
+
+	public void onStop() {
+		// 当Activity不可见的时候停止切换
+		scheduledExecutorService.shutdown();
+		super.onStop();
+	}
+
+	private class ScrollTask implements Runnable {
+
+		public void run() {
+			synchronized (mViewPager) {
+				currentItem = (currentItem + 1) % imageViews.length;
+				handler.obtainMessage().sendToTarget(); // 通过Handler切换图片
+			}
+		}
+	}
+
+	@OnClick(R.id.product_collect_button_new)
+	public void ClickCollect(View v) {
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		String url;
+		if (isCollect == 1) {
+			state = 1;
+			url = Constant.S_CallOffCollectGoods;
+		} else {
+			state = 0;
+			url = Constant.S_CollectGoods;
+		}
+		collect(url);
+	}
+
+	// @OnClick(R.id.district)
+	// public void onClickToSelectDistrict(View v) {
+	// getDistrice();
+	// }
+	//
+	// @OnClick(R.id.place)
+	// public void onClickToSelectPlace(View v) {
+	// getPlace(regionId);
+	// }
+
+	public void collect(String url) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("UserID", application.getUser().getUser_id());
+		map.put("Goods_ID", info.getGoods_id());
+		map.put("Is_attention", 1);
+		Log.i("info", application.getUser().getUser_id() + "");
+		WebServiceUtils.callWebService(url, map, new WebServiceCallBack() {
+
+			public void callBack(Object result) {
+				if (result != null) {
+					Bean bean = JSON.parseObject(result.toString(), Bean.class);
+					if (state == 1) {
+						if (bean.getState() == 1) {
+							application.showToast("取消收藏成功");
+							product_collect_button_new
+									.setBackgroundResource(R.drawable.product_detail_new_collect);
+							isCollect = 0;
+						} else {
+							application.showToast("取消收藏失败");
+						}
+					} else {
+						if (bean.getState() == 1) {
+							application.showToast("收藏成功");
+							product_collect_button_new
+									.setBackgroundResource(R.drawable.is_collect);
+							isCollect = 1;
+						} else {
+							application.showToast("收藏失败");
+						}
+					}
+				}
+			}
+		});
+	}
+
+	@OnClick(R.id.product_cart_button_new)
+	public void ClickAddCart(View v) {
+		addCart();
+	}
+
+	public void addCart() {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("json", addCartInfo.toString());
+		Log.e("LOG", JSON.toJSONString(addCartInfo));
+		showProgress("正在加入购物车");
+		WebServiceUtils.callWebService(Constant.S_AddCart, map,
+				new WebServiceCallBack() {
+					public void callBack(Object result) {
+						dismissProgress();
+						Log.i("info", result.toString());
+						if (result != null) {
+							Bean bean = JSON.parseObject(result.toString(),
+									Bean.class);
+							if (bean.getState() == 1) {
+								application.showToast("添加到购物车成功");
+								currentCount++;
+								product_count.setVisibility(0);
+								product_count.setText(currentCount + "");
+							} else {
+								application.showToast("添加到购物车失败");
+							}
+						}
+					}
+				});
+	}
+
+	public void cartList() {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		showProgress("正在加载中");
+		WebServiceUtils.callWebService(Constant.S_CartList,
+				application.addData(), new WebServiceCallBack() {
+					public void callBack(Object result) {
+						dismissProgress();
+						if (result != null) {
+							Bean bean = JSON.parseObject(result.toString(),
+									Bean.class);
+							List<AddCartInfo> list = JSON.parseArray(
+									bean.getData(), AddCartInfo.class);
+							for (int i = 0; i < list.size(); i++) {
+								AddCartInfo a = list.get(i);
+								currentCount += a.getGoods_number();
+							}
+							if (currentCount == 0) {
+								product_count.setVisibility(8);
+							} else {
+								product_count.setVisibility(0);
+								product_count.setText(currentCount + "");
+							}
+						}
+					}
+				});
+	}
+
+	/**
+	 * 返回当前商品所在购物车的数量
+	 * 
+	 * @param list
+	 * @return
+	 */
+	private int backCartCount(List<AddCartInfo> list) {
+		int count = 0;
+		for (int i = 0; i < list.size(); i++) {
+			AddCartInfo add = list.get(i);
+			if (info.getGoods_id() == add.getGoods_id()) {
+				// if (add.getGoods_number() > good_number) {
+				// count = good_number;
+				// } else {
+				count = add.getGoods_number();
+				// }
+				Log.e("",
+						good_number + "----" + count + "-==="
+								+ add.getGoods_number());
+				return count;
+			}
+		}
+		return count;
+	}
+
+	//
+}

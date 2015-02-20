@@ -1,0 +1,52 @@
+/**   
+ * @Title: SinaInfo.java 
+ * @Package cn.com.zhoufu.mouth.model 
+ * @Description: TODO(用一句话描述该文件做什么) 
+ * @author 王小杰   
+ * @date 2014-2-13 上午10:11:51
+ * @version V1.0   
+ */
+
+package cn.com.zhoufu.mouth.model;
+
+/**
+ * @author Administrator
+ * 
+ */
+public class SinaInfo {
+
+	private String name;
+
+	private String head;
+
+	private String id;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getHead() {
+		return head;
+	}
+
+	public void setHead(String head) {
+		this.head = head;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "id:" + id + ",name:" + name + ",head:" + head;
+	}
+}

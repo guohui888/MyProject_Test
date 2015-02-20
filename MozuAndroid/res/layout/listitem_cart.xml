@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/goodsImage"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/default_bg2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tvGoodName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="统一冰红茶瓶装饮料500ml" />
+
+        <TextView
+            android:id="@+id/tvShopPrice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="颜色：红色"
+            android:textColor="@color/gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone" >
+
+            <Button
+                android:id="@+id/down_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/down_product_bg"
+                android:contentDescription="@string/none" />
+
+            <TextView
+                android:id="@+id/tvGoodNumber"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:background="@drawable/product_edit_bg"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/add_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/add_product_bg"
+                android:contentDescription="@string/none" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/cart_selected_bg_normal"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/cart_selected_bg" />
+    </LinearLayout>
+
+</LinearLayout>
