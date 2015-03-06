@@ -222,6 +222,7 @@ public class LoginActivity extends BaseActivity implements OnChangedListener {
 	private void onClickLogin() {
 		if (!mQQAuth.isSessionValid()) {
 			IUiListener listener = new BaseUiListener() {
+				 /** 授权成功的回调*/ 
 				@Override
 				protected void doComplete(Object values) {
 					try {
@@ -232,6 +233,28 @@ public class LoginActivity extends BaseActivity implements OnChangedListener {
 					} catch (Exception e) {
 					}
 				}
+				
+				/** 授权失败的回调*/  
+			    @Override  
+			    public void onError(UiError arg0) {  
+			        // TODO Auto-generated method stub  
+			    	application.showToast("授权失败");
+//			        Toast.makeText(LoginActivity.this, "授权失败", 1000).show();  
+//			        Message msg = new Message();  
+//			        msg.arg1 = 2;  
+//			        handler.sendMessage(msg);     
+			    }  
+			    
+			    /** 取消授权的回调*/  
+			    @Override  
+			    public void onCancel() {  
+			        // TODO Auto-generated method stub 
+			    	application.showToast("取消授权");
+//			        Toast.makeText(LoginActivity.this, "取消授权", 1000).show();  
+//			        Message msg = new Message();  
+//			        msg.arg1 = 3;  
+//			        handler.sendMessage(msg);     
+			    }  
 			};
 			mTencent.login(this, "all", listener);
 		} else {

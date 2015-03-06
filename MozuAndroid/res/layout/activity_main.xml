@@ -32,13 +32,6 @@
                 android:text="首页"
                 android:textColor="@drawable/selector_tab_text_color" />
 
-            <RadioButton
-                android:id="@+id/search"
-                style="@style/main_tab_style"
-                android:background="@drawable/home_tab_background_selector"
-                android:drawableTop="@drawable/home_tab_search_selector"
-                android:text="搜索"
-                android:textColor="@drawable/selector_tab_text_color" />
 
             <RadioButton
                 android:id="@+id/category"
@@ -47,21 +40,35 @@
                 android:drawableTop="@drawable/home_tab_category_selector"
                 android:text="分类"
                 android:textColor="@drawable/selector_tab_text_color" />
-
+            <!--购物车
             <RadioButton
                 android:id="@+id/cart"
                 style="@style/main_tab_style"
                 android:background="@drawable/home_tab_background_selector"
                 android:drawableTop="@drawable/home_tab_cart_selector"
                 android:text="购物车"
+                android:textColor="@drawable/selector_tab_text_color" />            -->
+            <RadioButton
+                android:id="@+id/classroom"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:drawableTop="@drawable/home_tab_cart_selector"
+                android:text="维修课堂"
                 android:textColor="@drawable/selector_tab_text_color" />
 
+            <RadioButton
+                android:id="@+id/search"
+                style="@style/main_tab_style"
+                android:background="@drawable/home_tab_background_selector"
+                android:drawableTop="@drawable/home_tab_search_selector"
+                android:text="高级搜索"
+                android:textColor="@drawable/selector_tab_text_color" />
             <RadioButton
                 android:id="@+id/personal"
                 style="@style/main_tab_style"
                 android:background="@drawable/home_tab_background_selector"
                 android:drawableTop="@drawable/home_tab_personal_selector"
-                android:text="我的"
+                android:text="我的模组"
                 android:textColor="@drawable/selector_tab_text_color" />
         </RadioGroup>
 

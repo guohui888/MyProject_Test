@@ -52,6 +52,7 @@ import cn.com.zhoufu.mouth.activity.BaseFragment;
 import cn.com.zhoufu.mouth.activity.MainActivity;
 import cn.com.zhoufu.mouth.activity.category.SearchActivity;
 import cn.com.zhoufu.mouth.activity.mine.LoginActivity;
+import cn.com.zhoufu.mouth.activity.mine.OrderActivity;
 import cn.com.zhoufu.mouth.adapter.HomeButtomAdapter;
 import cn.com.zhoufu.mouth.adapter.HomeTopAdapter;
 import cn.com.zhoufu.mouth.adapter.HomeTwoAdapter;
@@ -83,7 +84,7 @@ public class HomeFragment extends BaseFragment implements OnPageChangeListener,
 	private int drawableID[] = { R.drawable.class_1, R.drawable.class_3,
 			R.drawable.class_4, R.drawable.class_5 };
 
-	private String classStr[] = { "特价专区", "P4", "P5", "P6" };
+	private String classStr[] = { "会员专区", "一键客服", "物流查询", "我的消息" };
 	@ViewInject(R.id.main_home_2_gridView)
 	private MyGridView mTwoGridView;
 
@@ -529,11 +530,37 @@ public class HomeFragment extends BaseFragment implements OnPageChangeListener,
 		}
 			break;
 		case R.id.main_home_gridView:
-			if (arg2 == 0) {
+			switch (arg2) {
+			case 0://会员专区
+				if (application.getUser().getUser_id() == 0) {
+					startActivity(new Intent(mContext, LoginActivity.class));
+					application.showToast("亲还没有登录，登录后可查看");
+					return;
+				}
+				startActivity(new Intent(mContext, OrderActivity.class));
+				break;
+			case 1://一键客服
+				Intent phoneIntent = new Intent(Intent.ACTION_DIAL,
+						Uri.parse("tel:" + "075583838000"));
+				phoneIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//跳转到拨号界面,Intent.ACTION_CALL
+				// 启动
+				startActivity(phoneIntent);
+				break;
+			case 2://物流查询
+				application.showToast(classStr[2]);
+				break;
+			case 3://我的消息
+				application.showToast(classStr[3]);
+				break;
+
+			default:
+				break;
+			}
+			/*if (arg2 == 0) {
 				startActivity(7);
 			} else {
 				startActivity(arg2 + 3);
-			}
+			}*/
 			// else if (arg2 == 5) {
 			// mAct.startActivity(new Intent(mAct, SwingActivity.class));
 			// } else if (arg2 == 6) {

@@ -63,6 +63,9 @@ public class MineFragment extends BaseFragment implements OnClickListener,
 
 	@ViewInject(R.id.right_button)
 	private Button right_button;
+	
+	@ViewInject(R.id.tvSetting)
+	private TextView tv_setting;
 
 	@ViewInject(R.id.loginBtn)
 	private Button loginBtn;
@@ -159,8 +162,13 @@ public class MineFragment extends BaseFragment implements OnClickListener,
 		right_button.setBackgroundResource(R.drawable.icon_setting);
 	}
 
-	@OnClick(R.id.right_button)
+	@OnClick(R.id.right_button ) 
 	public void settingClick(View v) {
+		startActivity(new Intent(mContext, SettingActivity.class));
+	}
+	
+	@OnClick(R.id.tvSetting ) 
+	public void tvSettingClick(View v) {
 		startActivity(new Intent(mContext, SettingActivity.class));
 	}
 

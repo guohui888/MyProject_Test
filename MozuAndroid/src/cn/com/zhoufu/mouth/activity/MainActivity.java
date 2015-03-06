@@ -53,8 +53,8 @@ public class MainActivity extends BaseActivity {
 	@ViewInject(R.id.tab_group)
 	private RadioGroup tabGroup;
 
-	@ViewInject(R.id.cart)
-	private RadioButton cart;
+	@ViewInject(R.id.classroom)
+	private RadioButton classroom;
 
 	@ViewInject(R.id.product_count)
 	private TextView product_count;
@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity {
 		case R.id.category:
 			changeContent("category", CategoryFragment.class, null);
 			break;
-		case R.id.cart:
+		case R.id.classroom:
 			changeContent("cart", CartFragment.class, null);
 			break;
 		case R.id.personal:
@@ -166,8 +166,8 @@ public class MainActivity extends BaseActivity {
 			tabIndex = R.id.category;
 			changeContent("category", CategoryFragment.class, null);
 			break;
-		case R.id.cart:
-			tabIndex = R.id.cart;
+		case R.id.classroom:
+			tabIndex = R.id.classroom;
 			changeContent("cart", CartFragment.class, null);
 			break;
 		case R.id.personal:
@@ -262,7 +262,7 @@ public class MainActivity extends BaseActivity {
 				((RadioButton) tabGroup.getChildAt(0)).setChecked(true);
 			}
 			if (action.equals(ACTION_CHANGE_RADIOBUTTON_CART)) {
-				tabIndex = R.id.cart;
+				tabIndex = R.id.classroom;
 				changeContent("cart", CartFragment.class, null);
 				((RadioButton) tabGroup.getChildAt(3)).setChecked(true);
 			}

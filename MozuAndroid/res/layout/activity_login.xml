@@ -107,8 +107,7 @@
             android:layout_height="wrap_content"
             android:text="合作帐号登录"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:visibility="gone" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,8 +115,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/edittext_bg"
-            android:orientation="vertical"
-            android:visibility="gone" >
+            android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/qq_login"
