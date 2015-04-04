@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_my_order"
+                    android:drawableLeft="@drawable/ic_my_car"
                     android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_arrow_right"
                     android:gravity="center|left"
@@ -101,24 +101,7 @@
                     android:textColor="@color/user_center_text_color"
                     android:textSize="18sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/split_color" />
-
-                <TextView
-                    android:id="@+id/tvAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_address"
-                    android:drawablePadding="5dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center|left"
-                    android:padding="10dp"
-                    android:text="收货地址"
-                    android:textColor="@color/user_center_text_color"
-                    android:textSize="18sp" />
+               
 
                 <View
                     android:layout_width="match_parent"
@@ -130,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_my_order"
+                    android:drawableLeft="@drawable/ic_my_wuliu"
                     android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_arrow_right"
                     android:gravity="center|left"
@@ -145,11 +128,30 @@
                     android:background="@color/split_color" />
 
                 <TextView
+                    android:id="@+id/tvCoupon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background"
+                    android:drawableLeft="@drawable/ic_my_crash"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_arrow_right"
+                    android:gravity="center|left"
+                    android:padding="10dp"
+                    android:text="我的优惠劵"
+                    android:textColor="@color/user_center_text_color"
+                    android:textSize="18sp" />
+                
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/split_color" />
+
+                <TextView
                     android:id="@+id/tvCollect"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_fav"
+                    android:drawableLeft="@drawable/ic_my_favour"
                     android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_arrow_right"
                     android:gravity="center|left"
@@ -158,6 +160,25 @@
                     android:textColor="@color/user_center_text_color"
                     android:textSize="18sp" />
 
+                 <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/split_color" />
+
+                 <TextView
+                    android:id="@+id/tvMyMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background"
+                    android:drawableLeft="@drawable/ic_my_message"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_arrow_right"
+                    android:gravity="center|left"
+                    android:padding="10dp"
+                    android:text="我的消息"
+                    android:textColor="@color/user_center_text_color"
+                    android:textSize="18sp" />
+                 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
@@ -168,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_my_order"
+                    android:drawableLeft="@drawable/ic_my_member"
                     android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_arrow_right"
                     android:gravity="center|left"
@@ -177,43 +198,9 @@
                     android:textColor="@color/user_center_text_color"
                     android:textSize="18sp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/split_color" />
+                
 
-                <TextView
-                    android:id="@+id/tvCoupon"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_my_order"
-                    android:drawablePadding="5dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center|left"
-                    android:padding="10dp"
-                    android:text="我的优惠劵"
-                    android:textColor="@color/user_center_text_color"
-                    android:textSize="18sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/split_color" />
-
-                 <TextView
-                    android:id="@+id/tvNews"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_my_order"
-                    android:drawablePadding="5dp"
-                    android:drawableRight="@drawable/icon_arrow_right"
-                    android:gravity="center|left"
-                    android:padding="10dp"
-                    android:text="我的消息"
-                    android:textColor="@color/user_center_text_color"
-                    android:textSize="18sp" />
+               
 
                 <View
                     android:layout_width="match_parent"
@@ -224,7 +211,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_money"
+                    android:drawableLeft="@drawable/ic_my_crash"
                     android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_arrow_right"
                     android:gravity="center|left"
@@ -233,6 +220,25 @@
                     android:textSize="18sp"
                     android:visibility="gone" />
 
+                 <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/split_color" />
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/background"
+                    android:drawableLeft="@drawable/ic_my_address"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/icon_arrow_right"
+                    android:gravity="center|left"
+                    android:padding="10dp"
+                    android:text="收货地址"
+                    android:textColor="@color/user_center_text_color"
+                    android:textSize="18sp" />
+                
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
@@ -243,7 +249,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background"
-                    android:drawableLeft="@drawable/ic_my_order"
+                    android:drawableLeft="@drawable/ic_my_setting"
                     android:drawablePadding="5dp"
                     android:drawableRight="@drawable/icon_arrow_right"
                     android:gravity="center|left"

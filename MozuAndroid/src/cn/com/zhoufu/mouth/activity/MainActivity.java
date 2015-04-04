@@ -32,6 +32,7 @@ import cn.com.zhoufu.mozu.R;
 import cn.com.zhoufu.mouth.WelcomeActivity;
 import cn.com.zhoufu.mouth.activity.cart.CartFragment;
 import cn.com.zhoufu.mouth.activity.category.CategoryFragment;
+import cn.com.zhoufu.mouth.activity.classroom.ClassRoomFragment;
 import cn.com.zhoufu.mouth.activity.home.HomeFragment;
 import cn.com.zhoufu.mouth.activity.mine.MineFragment;
 import cn.com.zhoufu.mouth.activity.search.SearchFragment;
@@ -104,7 +105,7 @@ public class MainActivity extends BaseActivity {
 			changeContent("category", CategoryFragment.class, null);
 			break;
 		case R.id.classroom:
-			changeContent("cart", CartFragment.class, null);
+			changeContent("cart", ClassRoomFragment.class, null);
 			break;
 		case R.id.personal:
 			changeContent("personal", MineFragment.class, null);
@@ -168,7 +169,7 @@ public class MainActivity extends BaseActivity {
 			break;
 		case R.id.classroom:
 			tabIndex = R.id.classroom;
-			changeContent("cart", CartFragment.class, null);
+			changeContent("cart", ClassRoomFragment.class, null);
 			break;
 		case R.id.personal:
 			tabIndex = R.id.personal;
@@ -261,11 +262,12 @@ public class MainActivity extends BaseActivity {
 				changeContent("cart", HomeFragment.class, null);
 				((RadioButton) tabGroup.getChildAt(0)).setChecked(true);
 			}
-			if (action.equals(ACTION_CHANGE_RADIOBUTTON_CART)) {
+			/*if (action.equals(ACTION_CHANGE_RADIOBUTTON_CART)) {
 				tabIndex = R.id.classroom;
-				changeContent("cart", CartFragment.class, null);
+//				changeContent("cart", CartFragment.class, null);
+//				changeContent("cart", CartFragment.class, null);
 				((RadioButton) tabGroup.getChildAt(3)).setChecked(true);
-			}
+			}*/
 			if (action.equals(ACTION_CHANGE_SEARCH)) {
 				tabIndex = R.id.search;
 				changeContent("search", SearchFragment.class, null);

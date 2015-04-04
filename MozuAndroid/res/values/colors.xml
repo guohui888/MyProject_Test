@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="TextColorWhite">#ffffff</color>
     <color name="default_bg_color">#f8f8f8</color>
     <color name="orange">#FFA011</color>
     <color name="red">#DF5431</color>
@@ -27,6 +28,7 @@
     <color name="gray2">#c5c5c5</color>
     <color name="gray3">#666666</color>
     <color name="gray4">#5f5f5f</color>
+    <color name="green">#0ec012</color>
     <color name="red2">#db120f</color>
     <color name="setting_text_color">#554639</color>
     <color name="get_checkcode_hint_text_color">#7d7d7d</color>

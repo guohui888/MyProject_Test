@@ -53,6 +53,9 @@ import cn.com.zhoufu.mouth.activity.MainActivity;
 import cn.com.zhoufu.mouth.activity.category.SearchActivity;
 import cn.com.zhoufu.mouth.activity.mine.LoginActivity;
 import cn.com.zhoufu.mouth.activity.mine.OrderActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyMemberActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyMessageActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyWuLiuActivity;
 import cn.com.zhoufu.mouth.adapter.HomeButtomAdapter;
 import cn.com.zhoufu.mouth.adapter.HomeTopAdapter;
 import cn.com.zhoufu.mouth.adapter.HomeTwoAdapter;
@@ -537,7 +540,7 @@ public class HomeFragment extends BaseFragment implements OnPageChangeListener,
 					application.showToast("亲还没有登录，登录后可查看");
 					return;
 				}
-				startActivity(new Intent(mContext, OrderActivity.class));
+				startActivity(new Intent(mContext, MyMemberActivity.class));
 				break;
 			case 1://一键客服
 				Intent phoneIntent = new Intent(Intent.ACTION_DIAL,
@@ -547,10 +550,28 @@ public class HomeFragment extends BaseFragment implements OnPageChangeListener,
 				startActivity(phoneIntent);
 				break;
 			case 2://物流查询
-				application.showToast(classStr[2]);
+//				application.showToast(classStr[2]);
+				if (!XMLParser.isNetworkAvailable(mContext)) {
+					application.showToast("网络未连接");
+					return;
+				}
+				if (application.getUser().getUser_id() == 0) {
+					startActivity(new Intent(mContext, LoginActivity.class));
+					return;
+				}
+				startActivity(new Intent(mContext, MyWuLiuActivity.class));
 				break;
 			case 3://我的消息
-				application.showToast(classStr[3]);
+//				application.showToast(classStr[3]);
+				if (!XMLParser.isNetworkAvailable(mContext)) {
+					application.showToast("网络未连接");
+					return;
+				}
+				if (application.getUser().getUser_id() == 0) {
+					startActivity(new Intent(mContext, LoginActivity.class));
+					return;
+				}
+				startActivity(new Intent(mContext, MyMessageActivity.class));
 				break;
 
 			default:

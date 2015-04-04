@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.com.zhoufu.mozu"
-    android:versionCode="53"
-    android:versionName="1.1.7" >
+    android:versionCode="55"
+    android:versionName="2.0" >
 
     <uses-sdk android:minSdkVersion="8" />
 
@@ -21,7 +21,7 @@
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.CALL_PHONE" >
     </uses-permission>
-
+    <!-- 添加拨出电话的权限 -->
     <!-- <uses-permission android:name="android.permission.READ_CONTACTS" /> -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -209,6 +209,17 @@
         </activity>
         <activity android:name="cn.com.zhoufu.mouth.activity.home.SwingActivity" >
         </activity>
+        <activity android:name="cn.com.zhoufu.mouth.activity.cart.CartActivity" >
+        </activity>
+        <activity android:name="cn.com.zhoufu.mouth.activity.setting.MyCrashActivity" >
+        </activity>
+        <activity android:name="cn.com.zhoufu.mouth.activity.setting.MyMemberActivity" >
+        </activity>
+        <activity android:name="cn.com.zhoufu.mouth.activity.setting.MyMessageActivity" >
+        </activity>
+        <activity android:name="cn.com.zhoufu.mouth.activity.setting.MyWuLiuActivity" >
+        </activity>
+        
     </application>
 
 </manifest>

@@ -11,6 +11,8 @@ package cn.com.zhoufu.mouth.model;
 
 import java.io.Serializable;
 
+import org.json.JSONObject;
+
 public class SearchInfo implements Serializable {
 
 	private int goods_id;

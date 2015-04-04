@@ -1,0 +1,394 @@
+/**   
+ * @Title: SearchFragment.java 
+ * @Package cn.com.zhoufu.mouth.activity.search 
+ * @Description: TODO(搜索fragment) 
+ * @author 王小杰
+ * @date 2014-2-11 下午1:56:12 
+ * @version V1.0   
+ */
+package cn.com.zhoufu.mouth.activity.classroom;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import android.content.Intent;
+import android.media.SoundPool;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import cn.com.zhoufu.mozu.R;
+import cn.com.zhoufu.mouth.activity.BaseFragment;
+import cn.com.zhoufu.mouth.adapter.HistoricalAdapter;
+import cn.com.zhoufu.mouth.adapter.KeyWordAdapter;
+import cn.com.zhoufu.mouth.constants.Constant;
+import cn.com.zhoufu.mouth.model.Bean;
+import cn.com.zhoufu.mouth.model.HistoricalInfo;
+import cn.com.zhoufu.mouth.model.KeywordInfo;
+import cn.com.zhoufu.mouth.utils.ListViewUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils;
+import cn.com.zhoufu.mouth.utils.WebServiceUtils.WebServiceCallBack;
+import cn.com.zhoufu.mouth.view.MyListView;
+import cn.com.zhoufu.mouth.view.pullview.AbOnListViewListener;
+import cn.com.zhoufu.mouth.view.pullview.AbPullListView;
+
+import com.alibaba.fastjson.JSON;
+import com.lidroid.xutils.ViewUtils;
+import com.lidroid.xutils.view.annotation.ViewInject;
+import com.lidroid.xutils.view.annotation.event.OnClick;
+import com.lidroid.xutils.view.annotation.event.OnItemClick;
+
+public class ClassRoomFragment extends BaseFragment  {
+
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@SuppressWarnings("static-access")
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater
+				.inflate(R.layout.fragment_classroom, container, false);
+		ViewUtils.inject(this, view);
+//		searchContent.addTextChangedListener(this);
+		// sensorManager = (SensorManager) getActivity().getSystemService(
+		// getActivity().SENSOR_SERVICE);
+		// vibrator = (Vibrator) getActivity().getSystemService(
+		// getActivity().VIBRATOR_SERVICE);
+		// initSounds();
+		return view;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+//		initDate();
+	}
+
+	@OnItemClick(R.id.listview)
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+		Intent intent = new Intent(mContext, SearchResultActivity.class);
+		intent.putExtra("keyword", dbUtils.queryHistorical().get(arg2)
+				.getName());
+		Log.i("info", dbUtils.queryHistorical().get(arg2).getName());
+		startActivity(intent);
+	}
+
+//	@OnItemClick(R.id.keywordListView)
+//	public void onItemClicks(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//		HistoricalInfo info = new HistoricalInfo();
+//		info.setName(list.get(arg2).getKeyword());
+//		dbUtils.addHistorical(info);
+//		Intent intent = new Intent(mContext, SearchResultActivity.class);
+//		intent.putExtra("keyword", list.get((int) arg3).getKeyword());
+//		Log.i("info", list.get(arg2).getKeyword());
+//		startActivity(intent);
+//	}
+
+//	public void initDate() {
+//		for (int i = 0; i < dbUtils.queryHistorical().size(); i++) {
+//			Log.i("info", dbUtils.queryHistorical().get(i).getName());
+//		}
+//		if (dbUtils.queryHistorical().size() == 0) {
+//			scrollView.setVisibility(View.GONE);
+//		} else {
+//			mAdapter = new HistoricalAdapter(mContext);
+//			mAdapter.setList(dbUtils.queryHistorical());
+//			// mListView.setAdapter(mAdapter);
+////			ListViewUtils.setListViewHeightBasedOnChildren(mListView);
+//		}
+//		mAdapter2 = new KeyWordAdapter(mContext);
+//		list = new ArrayList<KeywordInfo>();
+//		mAdapter2.setList(list);
+//		AbPullListView.setAdapter(mAdapter2);
+//
+//		AbPullListView.setPullLoadEnable(true);
+//		AbPullListView.setPullRefreshEnable(true);
+//		AbPullListView.setAbOnListViewListener(this);
+//	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		// if (sensorManager != null) {// 注册监听器
+		// // 第一个参数是Listener，第二个参数是所得传感器类型，第三个参数值获取传感器信息的频率
+		// sensorManager.registerListener(sensorEventListener,
+		// sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+		// SensorManager.SENSOR_DELAY_NORMAL);
+		// }
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		// if (sensorManager != null) {// 取消监听器
+		// sensorManager.unregisterListener(sensorEventListener);
+		// }
+	}
+
+//	@OnClick(R.id.searchBtn)
+//	public void searchClick(View v) {
+//		String content = searchContent.getText().toString().trim();
+//		if ("".equals(content)) {
+//			application.showToast("请输入搜索内容");
+//			return;
+//		}
+//		HistoricalInfo info = new HistoricalInfo();
+//		info.setName(content);
+//		dbUtils.addHistorical(info);
+//		Intent intent = new Intent(mContext, SearchResultActivity.class);
+//		intent.putExtra("keyword", content);
+//		searchContent.setText("");
+//		startActivity(intent);
+//	}
+//
+//	@OnClick(R.id.clearHistorical)
+//	public void clearClick(View v) {
+//		dbUtils.deleteHistorical();
+//		mAdapter.removeAll();
+//		initDate();
+//	}
+//
+//	@OnClick(R.id.ivSwing)
+//	public void swingClick(View v) {
+//		if (scrollView.getVisibility() == View.VISIBLE) {
+//			scrollView.setVisibility(View.GONE);
+//			ly_swing.setVisibility(View.VISIBLE);
+//		} else {
+//			scrollView.setVisibility(View.VISIBLE);
+//			ly_swing.setVisibility(View.GONE);
+//		}
+//	}
+
+	public void afterTextChanged(Editable s) {
+
+	}
+
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+
+	}
+
+//	public void onTextChanged(CharSequence s, int start, int before, int count) {
+//		keyword = s.toString();
+//		// if (s.toString() == null || "".equals(s.toString())) {
+//		// Log.i("info", "空");
+//		// AbPullListView.setVisibility(View.GONE);
+//		// mListView.setVisibility(View.VISIBLE);
+//		// clearBtn.setVisibility(View.VISIBLE);
+//		// } else {
+//		// Log.i("info", "NO空");
+//		// AbPullListView.setVisibility(View.VISIBLE);
+//		// mListView.setVisibility(View.GONE);
+//		// clearBtn.setVisibility(View.GONE);
+//		// }
+//		// mAdapter2.removeAll();
+//		// keyword(keyword, pageIndex, pageSize);
+//	}
+
+//	public void keyword(String content, int pageIndex, int pageSize) {
+//		HashMap<String, Object> map = new HashMap<String, Object>();
+//		map.put("keyword", content);
+//		map.put("page", pageIndex);
+//		map.put("count", pageSize);
+//		WebServiceUtils.callWebService(Constant.S_Keywords, map,
+//				new WebServiceCallBack() {
+//
+//					public void callBack(Object result) {
+//						Log.i("info", result.toString());
+//						if (result != null) {
+//							Bean bean = JSON.parseObject(result.toString(),
+//									Bean.class);
+//							List<KeywordInfo> list = JSON.parseArray(
+//									bean.getData(), KeywordInfo.class);
+//							mAdapter2.addAll(list);
+//						}
+//					}
+//				});
+//	}
+//
+//	public void onRefresh() {
+//		pageIndex = 1;
+//		mAdapter2.removeAll();
+//		keyword(keyword, pageIndex, pageSize);
+//		AbPullListView.stopRefresh();
+//	}
+//
+//	public void onLoadMore() {
+//		pageIndex++;
+//		keyword(keyword, pageIndex, pageSize);
+//		AbPullListView.stopLoadMore();
+//	}
+
+//	@Override
+//	public void onClick(View v) {
+//		// TODO Auto-generated method stub
+//
+//	}
+
+	// 重力感应监听
+	// private SensorEventListener sensorEventListener = new
+	// SensorEventListener() {
+	//
+	// public void onSensorChanged(SensorEvent event) {
+	// if (ly_swing.getVisibility() == View.VISIBLE && tag == 2) {
+	// // 传感器信息改变时执行该方法
+	// float[] values = event.values;
+	// float x = values[0]; // x轴方向的重力加速度，向右为正
+	// float y = values[1]; // y轴方向的重力加速度，向前为正
+	// float z = values[2]; // z轴方向的重力加速度，向上为正
+	// int medumValue = 18;
+	// if (Math.abs(x) > medumValue || Math.abs(y) > medumValue
+	// || Math.abs(z) > medumValue) {
+	// tag = 1;
+	// playSound();
+	// vibrator.vibrate(500);
+	// Message msg = new Message();
+	// msg.what = SENSOR_SHAKE;
+	// Log.e("", "3333333333333");
+	// handler.sendMessage(msg);
+	// }
+	// }
+	//
+	// }
+	//
+	// public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	//
+	// }
+	// };
+	//
+	// /**
+	// * 动作执行
+	// */
+	// private Handler handler = new Handler() {
+	// @Override
+	// public void handleMessage(Message msg) {
+	// super.handleMessage(msg);
+	// switch (msg.what) {
+	// case SENSOR_SHAKE:
+	// tvSensor.setText("正在搜索商品。。。。");
+	// sensor();
+	// break;
+	// }
+	// }
+	// };
+	//
+	// public void sensor() {
+	// WebServiceUtils.callWebService(Constant.S_SharkItOff, null,
+	// new WebServiceCallBack() {
+	//
+	// public void callBack(Object result) {
+	// Log.i("info", result.toString());
+	// if (result != null) {
+	// Bean bean = JSON.parseObject(result.toString(),
+	// Bean.class);
+	// if (bean.getState() == 1) {
+	// List<SearchInfo> list = JSON.parseArray(
+	// bean.getData(), SearchInfo.class);
+	// if (list.size() > 0) {
+	// info = list.get(0);
+	// dialog(info);
+	// } else {
+	// tvSensor.setText("暂无合适商品,重新试试..");
+	// tag = 2;
+	// }
+	// }
+	// }
+	// }
+	// });
+	// }
+	//
+	// public void dialog(SearchInfo info) {
+	// if (dialog == null) {
+	// Log.e("", "-=================");
+	// dialog = new Dialog(mContext, R.style.dialog);
+	// dialog.setContentView(R.layout.dialog_sensor);
+	// dialog.setCancelable(false);
+	// dialog.setCanceledOnTouchOutside(false);
+	// TextView goodsName = (TextView) dialog.findViewById(R.id.goodsName);
+	// TextView tvGoodsPrice = (TextView) dialog
+	// .findViewById(R.id.tvGoodsPrice);
+	// ImageView imageUrl = (ImageView) dialog.findViewById(R.id.imageUrl);
+	// Button GoodsBtn = (Button) dialog.findViewById(R.id.GoodsBtn);
+	// ImageView close_dialog = (ImageView) dialog
+	// .findViewById(R.id.close_dialog);
+	// goodsName.setText(info.getGoods_name());
+	// tvGoodsPrice.setText("￥" + info.getShop_price());
+	// application.bitmapUtils.display(imageUrl,
+	// Constant.IMAGE_URL + info.getGoods_thumb());
+	//
+	// GoodsBtn.setOnClickListener(this);
+	// close_dialog.setOnClickListener(this);
+	//
+	// WindowManager m = ((Activity) mContext).getWindowManager();
+	// Display d = m.getDefaultDisplay();
+	// WindowManager.LayoutParams params = dialog.getWindow()
+	// .getAttributes();
+	// params.width = (int) (d.getWidth() * 0.99);
+	// params.height = (int) (d.getHeight() * 0.7);
+	// } else {
+	// dialog.dismiss();
+	// tag = 2;
+	// }
+	// dialog.show();
+	// tag = 1;
+	// }
+	//
+	// public void onClick(View v) {
+	// switch (v.getId()) {
+	// case R.id.close_dialog:
+	// tag = 2;
+	// dialog.dismiss();
+	// tvSensor.setText("摇一摇，摇出你想要的");
+	// break;
+	// case R.id.GoodsBtn:
+	// tag = 2;
+	// dialog.dismiss();
+	// Intent intent = new Intent(mContext, ProductDetailActivity.class);
+	// intent.putExtra("info", info);
+	// intent.putExtra("price", "￥" + info.getShop_price());
+	// startActivity(intent);
+	// tvSensor.setText("摇一摇，摇出你想要的");
+	// break;
+	// }
+	// }
+	//
+	// private void initSounds() {
+	// soundPool = new SoundPool(100, AudioManager.STREAM_MUSIC, 100);
+	// soundMap = new HashMap<Integer, Integer>();
+	// AudioManager audioManager = (AudioManager) getActivity()
+	// .getSystemService(getActivity().AUDIO_SERVICE);
+	// // 获取音量
+	// float streamVolumeCurrent = audioManager
+	// .getStreamVolume(AudioManager.STREAM_MUSIC);
+	// float streamVolumeMax = audioManager
+	// .getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+	// volume = streamVolumeCurrent / streamVolumeMax;
+	// soundMap.put(1, soundPool.load(getActivity(), R.raw.shake, 100));
+	// }
+	//
+	// public static void playSound() {
+	// try {
+	// if (soundPool != null) {
+	// soundPool.play(soundMap.get(1), volume, volume, 100, 0, 1f);
+	// }
+	// } catch (Exception e) {
+	// }
+	// }
+}

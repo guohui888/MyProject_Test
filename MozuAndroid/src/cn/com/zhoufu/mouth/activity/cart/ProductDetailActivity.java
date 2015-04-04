@@ -422,9 +422,19 @@ public class ProductDetailActivity extends BaseActivity implements
 		// mActivity.getSupportFragmentManager().beginTransaction()
 		// .replace(R.id.content, CartFragment.instantiate(mContext,
 		// CartFragment.class.getName())).commit();
-		mActivity.sendBroadcast(new Intent(
+		/*mActivity.sendBroadcast(new Intent(
 				MainActivity.ACTION_CHANGE_RADIOBUTTON_CART));
-		application.finishOtherAct();
+		application.finishOtherAct();*/
+		
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, CartActivity.class));
 	}
 
 	public void initViewPager(List<CommodityInfo> list) {

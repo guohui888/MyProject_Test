@@ -28,6 +28,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -93,6 +95,16 @@ public class SureOrderActivity extends BaseActivity {
 
 	@ViewInject(R.id.edTime)
 	private EditText edTime;
+	
+	@ViewInject(R.id.et_number)
+	private EditText etNumber;//数量
+	
+	@ViewInject(R.id.btn_add)
+	private Button btnAdd;
+	
+	@ViewInject(R.id.btn_plus)
+	private Button btnPlus;
+	int num=1;//数量
 
 	@ViewInject(R.id.submitOrderBtn)
 	private Button submitOrderBtn;
@@ -165,6 +177,96 @@ public class SureOrderActivity extends BaseActivity {
 		mAdapter = new SureAdapter(mContext);
 		mAdapter.setList(list);
 		mListView.setAdapter(mAdapter);
+		btnAdd.setTag("-");
+		btnPlus.setTag("+");
+		
+		//设置输入类型为数字
+		etNumber.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
+		etNumber.setText(String.valueOf(num));
+		setViewListener();
+	}
+	
+	/**
+	 * 设置文本变化相关监听事件
+	 */
+	private void setViewListener() {
+		btnAdd.setOnClickListener(new OnButtonClickListener());
+		btnPlus.setOnClickListener(new OnButtonClickListener());
+		etNumber.addTextChangedListener(new OnTextChangeListener());
+	}
+
+	/**
+	 * 加减按钮事件监听器
+	 * 
+	 * 
+	 */
+	class OnButtonClickListener implements View.OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			String numString = etNumber.getText().toString();
+			if (numString == null || numString.equals("")) {
+				num = 1;
+				etNumber.setText("1");
+				tvTotalPrice.setText("￥" + totalPrice*num);
+			} else {
+				if (v.getTag().equals("-")) {
+					if (++num < 1) // 先加，再判断
+					{
+						num--;
+						btnPlus.setClickable(false);
+//						Toast.makeText(MainActivity.this, "请输入一个大于0的数字",
+//								Toast.LENGTH_SHORT).show();
+					} else {
+						etNumber.setText(String.valueOf(num));
+						tvTotalPrice.setText("￥" + totalPrice*num);
+					}
+				} else if (v.getTag().equals("+")) {
+					if (--num < 1) // 先减，再判断
+					{
+						num++;
+					} else {
+						etNumber.setText(String.valueOf(num));
+						tvTotalPrice.setText("￥" + totalPrice*num);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * EditText输入变化事件监听器
+	 */
+	class OnTextChangeListener implements TextWatcher {
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			String numString = s.toString();
+			if (numString == null || numString.equals("")) {
+				num = 0;
+			} else {
+				int numInt = Integer.parseInt(numString);
+				if (numInt < 0) {
+					btnPlus.setClickable(false);
+				} else {
+					// 设置EditText光标位置 为文本末端
+					etNumber.setSelection(etNumber.getText().toString().length());
+					num = numInt;
+				}
+			}
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+
+		}
+
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+
+		}
 
 	}
 
@@ -348,9 +450,9 @@ public class SureOrderActivity extends BaseActivity {
 			addOrderInfo.setPay_id(pay_id + "");
 			addOrderInfo.setPay_name(pay_name);
 			addOrderInfo.setHow_oos("等待所有商品备齐后再发");
-			addOrderInfo.setGoods_amount(totalPrice + "");
+			addOrderInfo.setGoods_amount(totalPrice*num + "");
 			addOrderInfo.setShipping_fee("0");
-			addOrderInfo.setOrder_amount(totalPrice + "");
+			addOrderInfo.setOrder_amount(totalPrice*num + "");
 			addOrderInfo.setSession_id("");
 		} else {
 			addOrderInfo.setUser_id("0");
@@ -377,10 +479,10 @@ public class SureOrderActivity extends BaseActivity {
 			addOrderInfo.setPay_id(pay_id + "");
 			addOrderInfo.setPay_name(pay_name);
 			addOrderInfo.setHow_oos("等待所有商品备齐后再发");
-			addOrderInfo.setGoods_amount(totalPrice + "");
+			addOrderInfo.setGoods_amount(totalPrice*num + "");
 			addOrderInfo.setShipping_fee("0");
 			addOrderInfo.setSession_id(application.DEVICE_ID);
-			addOrderInfo.setOrder_amount(totalPrice + "");
+			addOrderInfo.setOrder_amount(totalPrice*num + "");
 		}
 		List<GoodsListInfo> goodsList = new ArrayList<GoodsListInfo>();
 		for (int i = 0; i < list.size(); i++) {
@@ -435,14 +537,14 @@ public class SureOrderActivity extends BaseActivity {
 												- application.getUser()
 														.getFrozen_money();
 										Log.e("total", totalPrice + "");
-										if (money < totalPrice) {
+										if (money < totalPrice*num) {
 											application
 													.showToast("您的余额不足,请尽快充值");
 										} else {
 											updateStatue(order_sn, 1);
 											application.getUser()
 													.setUser_money(
-															money - totalPrice);
+															money - totalPrice*num);
 										}
 									}
 								} else {

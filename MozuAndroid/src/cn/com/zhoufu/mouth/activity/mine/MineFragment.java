@@ -34,6 +34,11 @@ import cn.com.zhoufu.mozu.R;
 import cn.com.zhoufu.mouth.activity.BaseFragment;
 import cn.com.zhoufu.mouth.activity.MainActivity;
 import cn.com.zhoufu.mouth.activity.MainActivity.OnForResultListener;
+import cn.com.zhoufu.mouth.activity.cart.CartActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyCrashActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyMemberActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyMessageActivity;
+import cn.com.zhoufu.mouth.activity.setting.MyWuLiuActivity;
 import cn.com.zhoufu.mouth.activity.setting.SettingActivity;
 import cn.com.zhoufu.mouth.constants.Constant;
 import cn.com.zhoufu.mouth.model.Bean;
@@ -73,6 +78,21 @@ public class MineFragment extends BaseFragment implements OnClickListener,
 	@ViewInject(R.id.img_avatar)
 	private CircleImageView img_avatar;
 
+	@ViewInject(R.id.tvMessage)//消息
+	private TextView tvMyMessage;
+	
+	@ViewInject(R.id.tvCoupon)//优惠卷
+	private TextView tvCoupon;
+	
+	@ViewInject(R.id.tvMember)//会员中心
+	private TextView tvMember;
+	
+	@ViewInject(R.id.tvLogistics)//物流
+	private TextView tvLogistics;
+	
+	@ViewInject(R.id.tvCar)//购物车
+	private TextView tvCar;
+	
 	@ViewInject(R.id.tvOrder)
 	private TextView tvOrder;
 
@@ -191,6 +211,71 @@ public class MineFragment extends BaseFragment implements OnClickListener,
 //		dialog();
 //	}
 
+	@OnClick(R.id.tvCoupon)
+	public void couponClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, MyCrashActivity.class));
+	}
+	
+	@OnClick(R.id.tvLogistics)
+	public void logisticsClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, MyWuLiuActivity.class));
+	}
+	
+	@OnClick(R.id.tvMember)
+	public void memberClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, MyMemberActivity.class));
+	}
+	
+	@OnClick(R.id.tvMyMessage)
+	public void myMessageClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, MyMessageActivity.class));
+	}
+	
+	@OnClick(R.id.tvCar)
+	public void carClick(View v) {
+		if (!XMLParser.isNetworkAvailable(mContext)) {
+			application.showToast("网络未连接");
+			return;
+		}
+		if (application.getUser().getUser_id() == 0) {
+			startActivity(new Intent(mContext, LoginActivity.class));
+			return;
+		}
+		startActivity(new Intent(mContext, CartActivity.class));
+	}
+	
 	@OnClick(R.id.tvOrder)
 	public void orderClick(View v) {
 		if (!XMLParser.isNetworkAvailable(mContext)) {

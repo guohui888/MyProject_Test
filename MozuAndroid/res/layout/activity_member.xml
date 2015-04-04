@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/cn.com.zhoufu.mozu">
+
+    <include layout="@layout/activity_header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/memberbg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="20dip" >
+
+        <cn.com.zhoufu.mouth.view.CircleImageView
+            android:id="@+id/img_avatar_member"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            app:border_color="@color/gray"
+            app:border_width="1dip"
+            android:src="@drawable/default_avatar" />
+
+        <TextView
+            android:id="@+id/tvMemberGrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:gravity="center"
+            android:text="我的等级:"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/img_grade_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/ordinaryusers" />
+
+        <TextView
+            android:id="@+id/tvMemberScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:gravity="center_vertical"
+            android:text="我的积分:"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_Privilege_member"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/member_privilege" />
+
+    <ScrollView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/white" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:gravity="center"
+                android:text="会员等级规则"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="3dip"
+                android:text="@string/member_Rule"
+                android:textColor="@color/gray3"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:gravity="center_vertical"
+                android:lineSpacingExtra="3dip"
+                android:text="@string/member_Rule_bottom"
+                android:textColor="@color/gray3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
